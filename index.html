@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="genspark-artifact-type" content="app">
+<meta name="theme-color" content="#171512">
+<title>서울살이, 서른 날 · EP.01 비 오는 소담길</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app/style.css">
+<link rel="stylesheet" href="app/art.css">
+<link rel="stylesheet" href="app/ui.css">
+</head>
+<body>
+<div id="frame">
+  <div id="stage" class="stage">
+
+    <!-- 배경 세트 -->
+    <div id="art" class="art" aria-hidden="false"></div>
+    <div id="figLayer" class="figs"></div>
+    <div id="propLayer" class="props"></div>
+    <div class="grain"></div>
+    <div class="vignette"></div>
+
+    <!-- 상단 HUD -->
+    <header id="hud" class="hud">
+      <p class="brand" aria-hidden="true">비 오는 소담길<span>DAY 1</span></p>
+      <div class="tools">
+        <button class="tool" id="tTrans" type="button" aria-pressed="false" aria-label="영어로 보기"><span class="dot"></span><span class="lb">번역</span></button>
+        <button class="tool" id="tHint" type="button" aria-label="힌트" disabled aria-disabled="true"><span class="dot"></span><span class="lb">힌트</span></button>
+        <button class="tool" id="tSound" type="button" aria-pressed="false" aria-label="소리 켜기"><span class="dot"></span><span class="lb">소리</span></button>
+      </div>
+    </header>
+
+    <div id="prog" class="prog" aria-hidden="true"></div>
+
+    <!-- 상호작용 레이어 -->
+    <div id="stageui" class="stageui"></div>
+    <div id="noteLayer" class="notelayer"></div>
+
+    <!-- 대사 -->
+    <section id="dlg" class="dlg" hidden>
+      <div class="dlg-in">
+        <div class="dlg-top"><span id="dlgName" class="nm"></span></div>
+        <div class="body">
+          <p id="dlgText" class="tx"></p>
+          <p id="dlgEn" class="en"></p>
+        </div>
+        <div class="dlg-foot"><span class="tip">탭하여 계속</span><span class="caret">▾</span></div>
+      </div>
+    </section>
+
+    <!-- 선택지 -->
+    <section id="choice" class="choice" hidden>
+      <div class="ch-in">
+        <div class="ch-top"><span id="chTitle" class="ch-title"></span><span id="chType" class="ch-type"></span></div>
+        <div id="chList" class="ch-list"></div>
+      </div>
+    </section>
+
+    <!-- 오버레이 (힌트 / 소리 / 오늘 배운 것) -->
+    <div id="ov" class="ov" hidden></div>
+
+    <!-- 시작 화면 (자바스크립트 없이도 보이는 첫 화면) -->
+    <section id="start" class="start">
+      <div class="st-bg"></div>
+      <div class="st-rain"></div>
+      <div class="st-in">
+        <p class="st-eyebrow">EP.01 · DAY 1</p>
+        <h1 class="st-title">비 오는 소담길</h1>
+        <p class="st-series">서울살이, 서른 날</p>
+        <p class="st-line">서울에서 보내는 30일.<br>첫날의 기록이 여기서 시작된다.</p>
+
+        <div class="st-form" id="signIn">
+          <label class="st-field">
+            <span>이름</span>
+            <input id="nameIn" type="text" maxlength="12" placeholder="비우면 ‘손님’" autocomplete="off" spellcheck="false">
+          </label>
+          <button id="startBtn" class="st-btn" type="button">이야기 시작하기</button>
+          <button id="resumeBtn" class="st-btn ghost" type="button" hidden>이어서 하기</button>
+          <p class="st-legal">이름은 순자가 부르는 호칭으로 쓰여요. 진행은 이 브라우저에 자동 저장됩니다.</p>
+        </div>
+
+        <p class="st-note">약 7분 · 세로 화면 · 소리 켜고 들으면 좋아요</p>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script src="app/content.js"></script>
+<script src="app/auth.js"></script>
+<script src="app/data.js"></script>
+<script src="app/audio.js"></script>
+<script src="app/art-src.js"></script>
+<script src="app/art.js"></script>
+<script src="app/interactions.js"></script>
+<script src="app/engine.js"></script>
+</body>
+</html>

@@ -1,0 +1,1066 @@
+/* ==========================================================================
+   art.css : 소프트 애니메 배경 세트 9종 + 실루엣 피겨 + 소품
+   일러스트 대신 빛·안개·실루엣 레이어로 무드를 잡는 1차 아트 패스.
+   모든 좌표는 1080×1920 논리 캔버스 기준.
+   ========================================================================== */
+
+/* ---------------- 공통 : 비, 빛, 안개 ---------------- */
+.fx{ position:absolute; inset:0; pointer-events:none; }
+
+.rain{
+  position:absolute; inset:-25% -14%; opacity:0; transition:opacity .8s ease;
+  background-image:repeating-linear-gradient(81deg,
+    rgba(255,255,255,.13) 0 1.4px, rgba(255,255,255,0) 1.4px 40px);
+  background-size:auto 420px;
+  animation:rainShift 1.4s linear infinite;
+  mix-blend-mode:screen;
+}
+.rain.on{ opacity:.46; }
+.rain.slow{ animation-duration:2.1s; opacity:.26; }
+@keyframes rainShift{ from{ background-position:0 -340px } to{ background-position:0 0 } }
+
+.bloom{ position:absolute; pointer-events:none; border-radius:50%; filter:blur(70px); mix-blend-mode:screen; }
+.haze{
+  position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(180deg, rgba(255,246,232,0) 40%, rgba(255,246,232,.07) 72%, rgba(255,246,232,0) 100%);
+}
+
+/* ================================================================
+   S01  비행기 창가
+   ================================================================ */
+.set-plane{ background:linear-gradient(168deg, #2a2a34 0%, #1d2029 46%, #14161d 100%); }
+.set-plane .cabin{
+  position:absolute; inset:0;
+  background:
+    radial-gradient(60% 34% at 78% 34%, rgba(120,146,180,.30), rgba(120,146,180,0) 70%),
+    linear-gradient(100deg, #23252e 0%, #1a1c23 40%, #242730 100%);
+}
+.set-plane .window{
+  position:absolute; left:140px; top:300px; width:500px; height:700px;
+  border-radius:120px;
+  background:linear-gradient(180deg, #4a5a78 0%, #7d8ba6 26%, #c9b6a6 58%, #f0d3a8 82%, #f8e3bd 100%);
+  box-shadow:0 0 0 24px #16181f, 0 0 0 44px #2b2e38, inset 0 0 110px rgba(255,240,210,.55),
+             0 0 240px 60px rgba(243,221,182,.20);
+  overflow:hidden;
+}
+.set-plane .window::before{
+  content:""; position:absolute; left:0; right:0; bottom:0; height:52%;
+  background:
+    linear-gradient(180deg, rgba(120,150,190,0) 0%, rgba(190,170,150,.45) 62%, rgba(120,96,80,.55) 100%);
+  filter:blur(2px);
+}
+.set-plane .window::after{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(190deg, rgba(255,255,255,.5) 0%, rgba(255,255,255,0) 34%);
+  mix-blend-mode:screen;
+}
+.set-plane .city{
+  position:absolute; left:0; right:0; bottom:0; height:40%;
+  background:
+    radial-gradient(3px 3px at 14% 70%, rgba(255,238,196,.95), transparent 60%),
+    radial-gradient(4px 4px at 24% 80%, rgba(255,226,170,.9), transparent 60%),
+    radial-gradient(3px 3px at 33% 64%, rgba(255,244,214,.85), transparent 60%),
+    radial-gradient(3px 3px at 41% 86%, rgba(255,226,170,.8), transparent 60%),
+    radial-gradient(4px 4px at 52% 72%, rgba(255,238,196,.9), transparent 60%),
+    radial-gradient(3px 3px at 61% 88%, rgba(255,226,170,.85), transparent 60%),
+    radial-gradient(3px 3px at 70% 68%, rgba(255,244,214,.8), transparent 60%),
+    radial-gradient(3px 3px at 79% 82%, rgba(255,238,196,.7), transparent 60%),
+    radial-gradient(3px 3px at 88% 74%, rgba(255,226,170,.75), transparent 60%),
+    linear-gradient(180deg, rgba(72,60,58,0) 0%, rgba(74,56,50,.5) 34%, rgba(46,34,30,.88) 100%);
+}
+.set-plane .wing{
+  position:absolute; left:-60px; right:-60px; top:58%; height:150px;
+  background:linear-gradient(180deg, rgba(72,74,84,.92), rgba(40,42,50,.98));
+  transform:rotate(-5deg); filter:blur(1.4px); border-radius:0 0 60px 60px;
+  box-shadow:0 -18px 50px rgba(243,221,182,.18);
+}
+.set-plane .seat{
+  position:absolute; right:-140px; bottom:-80px; width:560px; height:900px; border-radius:140px 240px 40px 40px;
+  background:linear-gradient(150deg, #3a3f4d 0%, #2a2e39 60%, #232630 100%);
+  box-shadow:inset 40px 0 90px rgba(0,0,0,.45);
+}
+.set-plane .headrest{
+  position:absolute; right:20px; bottom:520px; width:320px; height:300px; border-radius:160px 160px 40px 40px;
+  background:linear-gradient(160deg, #464c5b, #2b3039);
+  box-shadow:inset 0 20px 60px rgba(0,0,0,.3);
+}
+.set-plane .tray{
+  position:absolute; left:-40px; bottom:300px; width:420px; height:26px; border-radius:8px;
+  background:linear-gradient(180deg, #4a4f5c, #33373f); box-shadow:0 8px 30px rgba(0,0,0,.5);
+}
+.set-plane .glare{
+  position:absolute; left:-200px; top:-200px; width:1400px; height:900px;
+  background:radial-gradient(closest-side, rgba(255,235,196,.14), rgba(255,235,196,0) 70%);
+}
+
+/* ================================================================
+   S02  비 오는 소담길 / 저녁 변형
+   ================================================================ */
+.set-alley{
+  background:
+    radial-gradient(70% 40% at 64% 6%, rgba(224,232,226,.42), rgba(224,232,226,0) 62%),
+    linear-gradient(180deg, #7e8c8c 0%, #6c7a79 24%, #48544f 56%, #2c3532 100%);
+}
+.set-alley .sky{
+  position:absolute; left:0; right:0; top:0; height:52%;
+  background:linear-gradient(180deg, rgba(226,233,228,.55) 0%, rgba(178,191,186,.25) 50%, rgba(120,136,130,0) 100%);
+}
+.set-alley .bldgL{
+  position:absolute; left:0; top:0; width:330px; height:1180px;
+  background:linear-gradient(100deg, #3d4744 0%, #55605a 60%, #6a746c 100%);
+  clip-path:polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  box-shadow:inset -30px 0 60px rgba(0,0,0,.22);
+}
+.set-alley .bldgL::after{
+  content:""; position:absolute; inset:120px 40px 200px 40px;
+  background:
+    repeating-linear-gradient(180deg, rgba(255,238,205,.30) 0 4px, rgba(255,238,205,0) 4px 60px),
+    repeating-linear-gradient(90deg, rgba(255,238,205,.16) 0 3px, rgba(255,238,205,0) 3px 90px);
+  opacity:.5;
+}
+.set-alley .bldgR{
+  position:absolute; right:0; top:0; width:300px; height:1240px;
+  background:linear-gradient(260deg, #33403c 0%, #4a5751 70%, #63706a 100%);
+  box-shadow:inset 30px 0 60px rgba(0,0,0,.25);
+}
+.set-alley .bldgR::after{
+  content:""; position:absolute; left:60px; right:40px; top:200px; bottom:280px;
+  background:repeating-linear-gradient(180deg, rgba(255,236,200,.22) 0 4px, rgba(255,236,200,0) 4px 74px);
+  opacity:.45;
+}
+.set-alley .road{
+  position:absolute; left:0; right:0; bottom:0; height:52%;
+  background:linear-gradient(180deg, #4a544f 0%, #38423e 46%, #262e2b 100%);
+}
+.set-alley .road::after{
+  content:""; position:absolute; inset:0;
+  background:
+    radial-gradient(50% 30% at 56% 24%, rgba(236,243,238,.34), rgba(236,243,238,0) 70%),
+    repeating-linear-gradient(96deg, rgba(255,255,255,.055) 0 3px, rgba(255,255,255,0) 3px 34px);
+  mix-blend-mode:screen;
+}
+.set-alley .lamp{
+  position:absolute; right:150px; top:250px; width:16px; height:420px; background:rgba(38,44,42,.85);
+}
+.set-alley .lamp::after{
+  content:""; position:absolute; left:-58px; top:-42px; width:130px; height:56px; border-radius:60px 60px 20px 20px;
+  background:linear-gradient(180deg, #d8c7a3, #a99878);
+  box-shadow:0 0 90px 30px rgba(255,226,170,.5), 0 0 200px 90px rgba(255,214,150,.22);
+}
+.set-alley .gate{
+  position:absolute; right:210px; bottom:640px; width:210px; height:330px; border-radius:6px 6px 0 0;
+  background:linear-gradient(170deg, #5d7a63 0%, #3f5c49 60%, #2f4637 100%);
+  box-shadow:inset 0 0 40px rgba(0,0,0,.35), 0 0 60px rgba(255,236,198,.16);
+  border:3px solid rgba(30,44,34,.5);
+}
+.set-alley .gate::before{
+  content:""; position:absolute; inset:0;
+  background:repeating-linear-gradient(90deg, rgba(0,0,0,.16) 0 3px, rgba(0,0,0,0) 3px 34px);
+}
+/* 저녁 변형 */
+.set-alley.eve{ background:
+    radial-gradient(70% 40% at 66% 8%, rgba(255,196,140,.42), rgba(255,196,140,0) 60%),
+    linear-gradient(180deg, #6a5b64 0%, #54505a 26%, #34383c 60%, #22262a 100%); }
+.set-alley.eve .sky{ background:linear-gradient(180deg, rgba(255,190,150,.34) 0%, rgba(180,140,140,.16) 54%, rgba(90,80,90,0) 100%); }
+
+/* ================================================================
+   S03  봄하숙 대문
+   ================================================================ */
+.set-gate{
+  background:
+    radial-gradient(56% 34% at 50% 26%, rgba(255,238,205,.46), rgba(255,238,205,0) 66%),
+    linear-gradient(180deg, #6b7873 0%, #55625c 32%, #3a4540 68%, #232b27 100%);
+}
+.set-gate .wall{
+  position:absolute; left:0; right:0; top:0; height:1300px;
+  background:
+    repeating-linear-gradient(180deg, rgba(0,0,0,.05) 0 3px, rgba(0,0,0,0) 3px 46px),
+    linear-gradient(180deg, #8c8b7c 0%, #7c7d6e 42%, #6a6d5e 100%);
+  box-shadow:inset 0 -80px 90px rgba(0,0,0,.28);
+}
+.set-gate .wall::after{
+  content:""; position:absolute; inset:0;
+  background:repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 2px, rgba(0,0,0,0) 2px 120px);
+}
+.set-gate .jipung{
+  position:absolute; left:0; right:0; top:1050px; height:100px;
+  background:linear-gradient(180deg, #4b5348, #37402f);
+  box-shadow:0 12px 40px rgba(0,0,0,.4);
+}
+.set-gate .gd{
+  position:absolute; left:250px; top:520px; width:580px; height:640px;
+  border-radius:8px 8px 0 0;
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,.14) 0 3px, rgba(0,0,0,0) 3px 74px),
+    linear-gradient(170deg, #57795f 0%, #3d5c47 52%, #2c4433 100%);
+  border:9px solid #26362a;
+  box-shadow:inset 0 0 70px rgba(0,0,0,.45), 0 24px 60px -18px rgba(0,0,0,.5);
+  overflow:hidden;
+  transform-origin:left center;
+  transition:transform 1.05s cubic-bezier(.4,0,.2,1), box-shadow .6s;
+}
+.set-gate .gd.open{ transform:perspective(1600px) rotateY(-58deg); box-shadow:inset 0 0 40px rgba(0,0,0,.3), 60px 0 120px -30px rgba(255,226,170,.5); }
+.set-gate .gd .slit{
+  position:absolute; right:0; top:0; bottom:0; width:0; background:linear-gradient(90deg, rgba(255,232,186,0), rgba(255,232,186,.85));
+  transition:width 1.05s cubic-bezier(.4,0,.2,1);
+}
+.set-gate .gd.open .slit{ width:70px; }
+.set-gate .warmth{
+  position:absolute; left:250px; top:520px; width:580px; height:640px; opacity:0;
+  background:radial-gradient(60% 60% at 30% 50%, rgba(255,228,178,.75), rgba(255,228,178,0) 70%);
+  transition:opacity 1s ease .2s; filter:blur(20px);
+}
+.set-gate .warmth.on{ opacity:1; }
+.set-gate .bell{
+  position:absolute; left:840px; top:800px; width:64px; height:88px; border-radius:32px 32px 10px 10px;
+  background:linear-gradient(180deg, #cdbfa2, #9c8f74);
+  box-shadow:0 0 0 8px rgba(38,49,40,.45), 0 12px 40px rgba(0,0,0,.4);
+  transition:transform .2s;
+}
+.set-gate .bell.press{ transform:scale(.9); }
+.set-gate .step{
+  position:absolute; left:180px; right:180px; bottom:0; height:420px;
+  background:linear-gradient(180deg, #54584c 0%, #3d4136 60%, #2a2e26 100%);
+}
+.set-gate .step::after{
+  content:""; position:absolute; inset:0;
+  background:radial-gradient(60% 40% at 50% 10%, rgba(255,238,205,.28), rgba(255,238,205,0) 70%);
+}
+.set-gate .pot{
+  position:absolute; left:120px; bottom:420px; width:130px; height:130px; border-radius:16px 16px 40px 40px;
+  background:linear-gradient(170deg, #8a6a56, #5f4a3c);
+}
+.set-gate .pot::after{
+  content:""; position:absolute; left:20px; top:-130px; width:90px; height:140px;
+  background:radial-gradient(60% 60% at 50% 70%, #4f6a4e, #34503a 70%, rgba(52,80,58,0) 74%);
+  border-radius:50% 50% 40% 40%;
+}
+
+/* ================================================================
+   S04  현관 (신발장)
+   ================================================================ */
+.set-genkan{
+  background:
+    radial-gradient(48% 30% at 26% 22%, rgba(255,236,198,.50), rgba(255,236,198,0) 66%),
+    linear-gradient(180deg, #6a6455 0%, #59544a 40%, #3d3a33 100%);
+}
+.set-genkan .wallL{
+  position:absolute; left:0; top:0; width:100%; height:1180px;
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,.055) 0 2px, rgba(0,0,0,0) 2px 150px),
+    linear-gradient(180deg, #a3947a 0%, #8b7d66 46%, #746853 100%);
+}
+.set-genkan .shoji{
+  position:absolute; left:80px; top:150px; width:400px; height:800px;
+  background:linear-gradient(180deg, #f3e6c8 0%, #e8d7b3 60%, #d8c49d 100%);
+  border:10px solid #6b5a45;
+  box-shadow:0 0 120px 40px rgba(255,236,196,.34), inset 0 0 60px rgba(255,255,255,.5);
+  display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr;
+}
+.set-genkan .shoji i{ border:5px solid rgba(107,90,69,.75); }
+.set-genkan .stand{
+  position:absolute; right:60px; bottom:430px; width:420px; height:330px;
+  background:linear-gradient(180deg, #6d5237 0%, #57402c 100%);
+  box-shadow:inset 0 18px 40px rgba(255,236,196,.22), 0 20px 50px rgba(0,0,0,.35);
+  border-top:8px solid #7d6142;
+}
+.set-genkan .stand::after{
+  content:""; position:absolute; inset:34px 30px 20px;
+  background:repeating-linear-gradient(180deg, rgba(0,0,0,.20) 0 4px, rgba(0,0,0,0) 4px 96px);
+}
+.set-genkan .floor{
+  position:absolute; left:0; right:0; bottom:0; height:460px;
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,.10) 0 3px, rgba(0,0,0,0) 3px 96px),
+    linear-gradient(180deg, #8a6b4c 0%, #6f5439 60%, #523d29 100%);
+  box-shadow:inset 0 30px 60px rgba(0,0,0,.28);
+}
+.set-genkan .floor::after{
+  content:""; position:absolute; inset:0;
+  background:radial-gradient(60% 50% at 24% 0%, rgba(255,236,196,.30), rgba(255,236,196,0) 72%);
+}
+.set-genkan .threshold{
+  position:absolute; left:0; right:0; bottom:430px; height:26px;
+  background:linear-gradient(180deg, #3c2f22, #241c14);
+}
+
+/* ================================================================
+   S05  주방과 계단
+   ================================================================ */
+.set-kitchen{
+  background:
+    radial-gradient(52% 32% at 70% 18%, rgba(255,238,200,.52), rgba(255,238,200,0) 68%),
+    linear-gradient(180deg, #6d6a56 0%, #565244 42%, #3a372d 100%);
+}
+.set-kitchen .wall{
+  position:absolute; left:0; right:0; top:0; height:1200px;
+  background:linear-gradient(180deg, #a89c80 0%, #8e846c 50%, #756b56 100%);
+}
+.set-kitchen .tiles{
+  position:absolute; left:0; right:0; top:620px; height:560px;
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,.30) 0 3px, rgba(255,255,255,0) 3px 88px),
+    repeating-linear-gradient(180deg, rgba(255,255,255,.30) 0 3px, rgba(255,255,255,0) 3px 88px),
+    linear-gradient(180deg, #c9bda1, #b3a68a);
+  opacity:.85;
+}
+.set-kitchen .wind{
+  position:absolute; right:90px; top:180px; width:420px; height:520px;
+  background:linear-gradient(190deg, #f6ead0 0%, #e9d7b4 60%, #d9c6a2 100%);
+  border:12px solid #6a5b45;
+  box-shadow:0 0 160px 60px rgba(255,236,196,.34), inset 0 0 60px rgba(255,255,255,.6);
+}
+.set-kitchen .wind::before, .set-kitchen .wind::after{
+  content:""; position:absolute; background:rgba(106,91,69,.8);
+}
+.set-kitchen .wind::before{ left:50%; top:0; bottom:0; width:8px; }
+.set-kitchen .wind::after{ top:50%; left:0; right:0; height:8px; }
+.set-kitchen .stairs{
+  position:absolute; left:-20px; bottom:380px; width:520px; height:760px;
+  background:linear-gradient(120deg, #5c4a36 0%, #463726 100%);
+  clip-path:polygon(0 100%, 0 6%, 100% 100%);
+  box-shadow:inset -40px 0 80px rgba(0,0,0,.35);
+}
+.set-kitchen .stairs::after{
+  content:""; position:absolute; inset:0;
+  background:repeating-linear-gradient(-38deg, rgba(255,238,205,.16) 0 4px, rgba(0,0,0,0) 4px 62px);
+}
+.set-kitchen .counter{
+  position:absolute; right:0; bottom:0; width:640px; height:520px;
+  background:linear-gradient(180deg, #7d6146 0%, #5d4832 100%);
+  box-shadow:inset 0 20px 60px rgba(255,236,196,.2);
+}
+.set-kitchen .counter::after{
+  content:""; position:absolute; left:0; right:0; top:-16px; height:22px;
+  background:linear-gradient(180deg, #cbb189, #9c8461);
+}
+.set-kitchen .kettle{
+  position:absolute; right:200px; bottom:520px; width:130px; height:120px;
+  border-radius:50% 50% 42% 42%; background:linear-gradient(170deg, #d9cdb4, #9d8f76);
+  box-shadow:0 14px 30px rgba(0,0,0,.3);
+}
+.set-kitchen .cups{ position:absolute; right:400px; bottom:520px; display:flex; gap:18px; }
+.set-kitchen .cups i{
+  width:56px; height:64px; border-radius:8px 8px 22px 22px;
+  background:linear-gradient(170deg, #efe3c9, #c9b795); display:block;
+}
+.set-kitchen .steam{
+  position:absolute; right:404px; bottom:600px; width:56px; height:220px;
+  background:radial-gradient(closest-side, rgba(255,255,255,.5), rgba(255,255,255,0) 72%);
+  filter:blur(10px); animation:steamUp 4.5s ease-in-out infinite;
+}
+@keyframes steamUp{
+  0%{ opacity:0; transform:translateY(20px) scaleX(.8) }
+  35%{ opacity:.7 }
+  100%{ opacity:0; transform:translateY(-110px) scaleX(1.4) }
+}
+
+/* ================================================================
+   S06 / S09  2층 방 · 밤의 방
+   ================================================================ */
+.set-room{
+  background:
+    radial-gradient(50% 30% at 74% 22%, rgba(255,240,206,.55), rgba(255,240,206,0) 68%),
+    linear-gradient(180deg, #7a7160 0%, #615a4b 40%, #413c32 100%);
+}
+.set-room .wall{
+  position:absolute; inset:0 0 560px 0;
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,.055) 0 2px, rgba(0,0,0,0) 2px 170px),
+    linear-gradient(180deg, #b3a68c 0%, #9a8d74 46%, #7f755f 100%);
+}
+.set-room .window{
+  position:absolute; right:80px; top:210px; width:440px; height:600px;
+  background:linear-gradient(190deg, #e9f0ea 0%, #cfdcd8 52%, #b7c8c4 100%);
+  border:14px solid #6b5d47;
+  box-shadow:0 0 200px 70px rgba(236,244,236,.38), inset 0 0 60px rgba(255,255,255,.5);
+}
+.set-room .window::before, .set-room .window::after{ content:""; position:absolute; background:rgba(107,93,71,.85); }
+.set-room .window::before{ left:50%; top:0; bottom:0; width:9px; }
+.set-room .window::after{ top:44%; left:0; right:0; height:9px; }
+.set-room .curtain{
+  position:absolute; right:36px; top:170px; width:210px; height:760px;
+  background:linear-gradient(90deg, rgba(246,240,226,.92), rgba(226,214,192,.86));
+  filter:blur(.4px);
+  clip-path:polygon(0 0, 100% 4%, 92% 100%, 6% 96%);
+  opacity:.9;
+}
+.set-room .floor{
+  position:absolute; left:0; right:0; bottom:0; height:580px;
+  background:
+    repeating-linear-gradient(94deg, rgba(0,0,0,.10) 0 3px, rgba(0,0,0,0) 3px 130px),
+    linear-gradient(180deg, #9a7b57 0%, #7b5f40 60%, #5c452c 100%);
+  box-shadow:inset 0 30px 70px rgba(0,0,0,.3);
+}
+.set-room .floor::after{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(105deg, rgba(255,240,206,.34), rgba(255,240,206,0) 60%);
+}
+.set-room .bed{
+  position:absolute; left:-30px; bottom:420px; width:620px; height:420px; border-radius:20px 26px 10px 10px;
+  background:linear-gradient(175deg, #efe7d6 0%, #ddd2bd 56%, #c3b69e 100%);
+  box-shadow:0 26px 60px -20px rgba(0,0,0,.4), inset 0 -18px 40px rgba(0,0,0,.10);
+}
+.set-room .bed::before{
+  content:""; position:absolute; left:0; right:0; top:-70px; height:120px; border-radius:60px 60px 10px 10px;
+  background:linear-gradient(180deg, #d7c9ae, #c0b096);
+}
+.set-room .bed::after{
+  content:""; position:absolute; left:56px; top:34px; width:380px; height:170px; border-radius:60px;
+  background:linear-gradient(160deg, #fbf6ea, #ece2cd);
+  box-shadow:0 10px 30px rgba(0,0,0,.12);
+}
+.set-room .desk{
+  position:absolute; right:20px; bottom:560px; width:520px; height:40px;
+  background:linear-gradient(180deg, #6a5138, #4e3b27);
+}
+.set-room .desk::before, .set-room .desk::after{
+  content:""; position:absolute; top:36px; width:26px; height:240px; background:#4a3825;
+}
+.set-room .desk::before{ left:40px; } .set-room .desk::after{ right:40px; }
+.set-room .box{
+  position:absolute; right:170px; bottom:600px; width:180px; height:110px;
+  background:linear-gradient(170deg, #8a6a49, #5e4630);
+  border-radius:5px; box-shadow:0 12px 26px rgba(0,0,0,.35), inset 0 6px 14px rgba(255,232,196,.24);
+}
+.set-room .box::after{
+  content:""; position:absolute; left:0; right:0; top:34px; height:9px; background:rgba(30,22,15,.5);
+}
+.set-room .plant{
+  position:absolute; right:96px; bottom:600px; width:110px; height:90px; border-radius:6px 6px 26px 26px;
+  background:linear-gradient(170deg, #a8755a, #7c523d);
+}
+.set-room .plant::after{
+  content:""; position:absolute; left:6px; top:-150px; width:100px; height:160px;
+  background:radial-gradient(60% 60% at 50% 70%, #567a52, #37573a 72%, rgba(55,87,58,0) 76%);
+  border-radius:50% 50% 44% 44%;
+}
+.set-room .lightshaft{
+  position:absolute; right:0; top:200px; width:900px; height:1200px; pointer-events:none;
+  background:linear-gradient(196deg, rgba(255,244,214,.30) 0%, rgba(255,244,214,.06) 45%, rgba(255,244,214,0) 70%);
+  transform:rotate(6deg); filter:blur(12px); mix-blend-mode:screen;
+}
+/* 밤 변형 */
+.set-room.night{
+  background:
+    radial-gradient(46% 30% at 72% 22%, rgba(148,176,206,.34), rgba(148,176,206,0) 66%),
+    linear-gradient(180deg, #2a3244 0%, #222a39 44%, #171d27 100%);
+}
+.set-room.night .wall{ background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,.06) 0 2px, rgba(0,0,0,0) 2px 170px),
+    linear-gradient(180deg, #404b60 0%, #333c4d 50%, #262d3a 100%); }
+.set-room.night .window{ background:linear-gradient(190deg, #2c3a52 0%, #36455f 48%, #4b5a70 100%);
+  box-shadow:0 0 160px 50px rgba(120,150,190,.24), inset 0 0 70px rgba(120,150,190,.3); }
+.set-room.night .floor{ background:linear-gradient(180deg, #3a3446 0%, #2b2734 60%, #1e1b25 100%); }
+.set-room.night .floor::after{ background:linear-gradient(105deg, rgba(148,176,206,.22), rgba(148,176,206,0) 62%); }
+.set-room.night .bed{ background:linear-gradient(175deg, #6c7080 0%, #565a68 56%, #454956 100%); }
+.set-room.night .bed::before{ background:linear-gradient(180deg, #5a5d6b, #4a4d59); }
+.set-room.night .bed::after{ background:linear-gradient(160deg, #8b8f9c, #6f7482); }
+.set-room.night .lightshaft{ background:linear-gradient(196deg, rgba(150,180,215,.24) 0%, rgba(150,180,215,.04) 46%, rgba(150,180,215,0) 70%); }
+.set-room.night .desk, .set-room.night .box, .set-room.night .plant{ filter:brightness(.62) saturate(.7); }
+
+/* ================================================================
+   S07  사진 클로즈업
+   ================================================================ */
+.set-photo{
+  background:
+    radial-gradient(60% 40% at 50% 40%, rgba(255,240,212,.20), rgba(255,240,212,0) 68%),
+    linear-gradient(180deg, #3b342c 0%, #2b2620 54%, #1c1815 100%);
+}
+.set-photo .table{
+  position:absolute; left:-80px; right:-80px; bottom:-60px; height:900px; border-radius:50% 50% 0 0;
+  background:linear-gradient(180deg, #6a5340 0%, #4b3a2c 60%, #33271e 100%);
+  box-shadow:inset 0 40px 90px rgba(0,0,0,.4);
+}
+/* 사진은 이 장면의 주인공 — 화면 폭의 84~88% 를 차지한다.
+   폭 900 × 높이 1117 = 원본 비율(1856:2304) 유지, 회전 -1.2deg 포함 실측 923 논리(≈85%). */
+.set-photo .photo-wrap{
+  position:absolute; left:50%; top:470px; transform:translateX(-50%) rotate(-1.2deg);
+  width:900px; height:1117px; perspective:2400px;
+}
+.set-photo .photo{
+  position:absolute; inset:0; border-radius:6px; transform-style:preserve-3d;
+  transition:transform 1.05s cubic-bezier(.5,0,.2,1);
+  box-shadow:0 50px 110px -30px rgba(0,0,0,.75), 0 0 0 1px rgba(255,255,255,.10);
+}
+.set-photo .photo.flip{ transform:rotateY(180deg); }
+.set-photo .face, .set-photo .back{
+  position:absolute; inset:0; border-radius:6px;
+  -webkit-backface-visibility:hidden; backface-visibility:hidden; overflow:hidden;
+}
+/* 앞뒷면 — backface-visibility 만 믿지 않고 opacity 로도 확실히 갈아 끼운다
+   (3D 를 평면으로 그리는 렌더러에서 앞면이 비치지 않도록) */
+.set-photo .face{ opacity:1; transition:opacity .01s linear .5s; }
+.set-photo .back{ opacity:0; transition:opacity .01s linear .5s; }
+.set-photo .photo.flip .face{ opacity:0; pointer-events:none; }
+.set-photo .photo.flip .back{ opacity:1; }
+.set-photo .face{
+  background:
+    radial-gradient(60% 50% at 50% 26%, rgba(255,244,214,.5), rgba(255,244,214,0) 66%),
+    linear-gradient(178deg, #d8c9a8 0%, #cbb894 46%, #b39f7c 100%);
+  padding:44px; box-shadow:inset 0 0 90px rgba(92,64,34,.35);
+}
+.set-photo .face::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:
+    radial-gradient(30% 24% at 84% 12%, rgba(255,255,255,.4), rgba(255,255,255,0) 70%),
+    repeating-linear-gradient(112deg, rgba(120,92,52,.06) 0 2px, rgba(120,92,52,0) 2px 7px);
+}
+.set-photo .inner{ position:absolute; inset:44px; overflow:hidden; background:linear-gradient(180deg, #cdbb96, #b6a17c); }
+/* 사진 속 건물 */
+.set-photo .bldg{
+  position:absolute; left:70px; right:70px; top:90px; height:390px;
+  background:linear-gradient(180deg, #a58e6a 0%, #8f7654 70%, #7a6244 100%);
+  box-shadow:inset 0 0 70px rgba(60,40,20,.4);
+}
+.set-photo .bldg .crown{
+  position:absolute; left:50%; top:-46px; transform:translateX(-50%);
+  width:150px; height:78px; border-radius:78px 78px 0 0;
+  border:12px solid #7c6647; border-bottom:none; background:transparent;
+}
+.set-photo .bldg .arch{
+  position:absolute; width:104px; height:172px; border-radius:56px 56px 6px 6px;
+  background:linear-gradient(180deg, #4e4230, #3a3124);
+  box-shadow:inset 0 0 20px rgba(0,0,0,.6), 0 0 0 7px rgba(124,102,71,.55);
+}
+.set-photo .bldg .arch.a{ left:56px; top:150px; }
+.set-photo .bldg .arch.b{ left:214px; top:150px; }
+.set-photo .bldg .arch.c{ right:56px; top:150px; }
+.set-photo .bldg .sign{
+  position:absolute; left:50%; top:96px; transform:translateX(-50%);
+  width:260px; height:34px; background:rgba(255,248,226,.32); border-radius:4px;
+}
+.set-photo .bldg .door{
+  position:absolute; left:50%; bottom:0; transform:translateX(-50%);
+  width:150px; height:150px; border-radius:76px 76px 0 0; background:linear-gradient(180deg, #574937, #3d3325);
+}
+/* 사진 속 세 사람 */
+.set-photo .folks{ position:absolute; left:0; right:0; bottom:0; height:330px; display:flex; align-items:flex-end; justify-content:center; gap:34px; }
+.set-photo .folk{ position:relative; width:150px; height:300px; }
+.set-photo .folk .h{
+  position:absolute; left:50%; top:0; transform:translateX(-50%);
+  width:96px; height:112px; border-radius:48% 48% 44% 44%;
+  background:linear-gradient(170deg, #8b7452, #6f5a3d);
+}
+.set-photo .folk .hair{
+  position:absolute; left:50%; top:-10px; transform:translateX(-50%);
+  width:118px; height:98px; border-radius:52% 52% 20% 20%;
+  background:linear-gradient(180deg, #4b3c28, #3a2e1f);
+}
+.set-photo .folk .b{
+  position:absolute; left:50%; bottom:0; transform:translateX(-50%);
+  width:140px; height:210px; border-radius:60px 60px 10px 10px;
+  background:linear-gradient(170deg, #9d8763, #7d6a4a);
+}
+.set-photo .folk.f2 .b{ background:linear-gradient(170deg, #a98f68, #8a7350); }
+.set-photo .folk.f2{ height:320px; }
+.set-photo .folk.f3 .b{ background:linear-gradient(170deg, #93805f, #756447); }
+.set-photo .vign{
+  position:absolute; inset:0; pointer-events:none;
+  box-shadow:inset 0 0 140px rgba(60,40,20,.55);
+  background:radial-gradient(60% 50% at 50% 46%, rgba(255,240,200,.16), rgba(255,240,200,0) 70%);
+}
+/* 뒷면 */
+.set-photo .back{
+  transform:rotateY(180deg);
+  background:
+    repeating-linear-gradient(0deg, rgba(120,92,52,.055) 0 2px, rgba(120,92,52,0) 2px 5px),
+    linear-gradient(178deg, #e6dcc4 0%, #dbcfb2 60%, #cdbf9f 100%);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:34px;
+  padding:80px 70px; text-align:center;
+}
+.set-photo .back .hand{
+  font-family:var(--serif); font-size:52px; line-height:1.6; color:#5b4a33; letter-spacing:.01em;
+}
+.set-photo .back .stamp{
+  font-family:var(--sans); font-size:36px; letter-spacing:.16em; color:rgba(91,74,51,.62);
+  border-top:1px solid rgba(91,74,51,.28); border-bottom:1px solid rgba(91,74,51,.28); padding:16px 22px;
+}
+.set-photo .photo-hint{
+  position:absolute; left:50%; bottom:120px; transform:translateX(-50%);
+  font-family:var(--sans); font-size:30px; letter-spacing:.06em; color:rgba(255,246,228,.60);
+  white-space:nowrap; pointer-events:none;
+}
+.set-photo .pin-legend{ bottom:206px; z-index:9; }
+.set-photo .photo-wrap{ cursor:pointer; }
+
+/* ================================================================
+   S08  방 문 앞
+   ================================================================ */
+.set-door{ background:linear-gradient(180deg, #5c5346 0%, #4a4337 44%, #302b23 100%); }
+.set-door .wall{
+  position:absolute; inset:0;
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,.055) 0 2px, rgba(0,0,0,0) 2px 180px),
+    linear-gradient(180deg, #a4977c 0%, #8b7f66 60%, #6f6450 100%);
+}
+.set-door .halllight{
+  position:absolute; left:50%; top:0; transform:translateX(-50%);
+  width:900px; height:1300px;
+  background:radial-gradient(60% 50% at 50% 8%, rgba(255,222,168,.55), rgba(255,222,168,0) 70%);
+  filter:blur(20px); mix-blend-mode:screen;
+}
+.set-door .frame{
+  position:absolute; left:220px; top:420px; width:640px; height:1000px;
+  background:linear-gradient(180deg, #5a4a36, #3f3324);
+  box-shadow:0 0 0 14px #6d5a42, 0 40px 90px rgba(0,0,0,.45);
+}
+.set-door .leaf{
+  position:absolute; inset:0; transform-origin:left center;
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,.10) 0 3px, rgba(0,0,0,0) 3px 120px),
+    linear-gradient(160deg, #b08b5f, #8b6a45);
+  transform:perspective(1800px) rotateY(-19deg);
+  transition:transform .9s cubic-bezier(.3,0,.2,1);
+  box-shadow:12px 0 50px rgba(0,0,0,.3);
+}
+.set-door .leaf.open{ transform:perspective(1800px) rotateY(-56deg); }
+.set-door .gap{
+  position:absolute; right:0; top:0; bottom:0; width:0; background:linear-gradient(90deg, rgba(255,226,176,0), rgba(255,226,176,.9));
+  transition:width .9s ease; filter:blur(6px);
+}
+.set-door .frame.open .gap{ width:110px; }
+.set-door .knob{
+  position:absolute; right:52px; top:52%; width:40px; height:40px; border-radius:50%;
+  background:radial-gradient(circle at 34% 30%, #e2d3b0, #9d8f70 60%, #7d6f52);
+  box-shadow:0 6px 14px rgba(0,0,0,.4);
+}
+.set-door .floorline{
+  position:absolute; left:0; right:0; bottom:0; height:420px;
+  background:linear-gradient(180deg, #8a6c4a 0%, #6b5238 60%, #4b3927 100%);
+  box-shadow:inset 0 26px 60px rgba(0,0,0,.3);
+}
+
+/* ================================================================
+   피겨 : 순자 (실루엣 + 최소 표정) · 호두
+   ================================================================ */
+.fig{ position:absolute; left:50%; bottom:110px; transform:translateX(-50%) scale(.72); transform-origin:center bottom;
+  width:660px; height:1080px; transition:opacity .5s ease, transform .5s ease; }
+.fig.out{ opacity:0; transform:translateX(-50%) scale(.72) translateY(30px); }
+
+/* 정본 피겨 이미지 : 상반신 컷아웃을 하단 기준으로 앉힌다.
+   높이 = 논리 1920의 61.5% (1180px), 가로는 비율 유지(auto). */
+.fig.has-img{
+  /* width:auto 는 절대배치에서 0 으로 붕괴하므로 컨테이너 폭을 고정하고
+     이미지는 높이 기준으로 비율 유지(width:auto) + 가운데 정렬한다. */
+  /* 대사 카드 상단(실측 논리 1589)보다 위에서 피겨가 끝나도록 띄운다. 높이 1180 유지.
+     1920 - 344 = 1576 < 1589 → 겹침 0. */
+  width:720px; height:1180px; bottom:344px;
+  transform:translateX(-50%); display:flex; align-items:flex-end; justify-content:center;
+}
+.fig.has-img.out{ opacity:0; transform:translateX(-50%) translateY(26px); }
+.fig.has-img > .figimg{
+  position:relative; left:auto; bottom:auto;
+  height:100%; width:auto; max-width:none; max-height:100%;
+  object-fit:contain; object-position:bottom center; display:block;
+  filter:drop-shadow(0 30px 60px rgba(20,14,8,.38));
+}
+.fig.has-img.fig-right{ left:68% !important; }
+/* 이미지가 있으면 CSS 실루엣은 존재해도 보이지 않게 */
+.fig.has-img .sunja, .fig.has-img .hodu{ display:none; }
+.fig-right{ left:68% !important; }
+.fig-right .sunja .f-head, .fig-right .sunja .f-neck{ transform:translateX(-50%) rotate(-2deg); }
+
+.sunja{ position:absolute; inset:0; }
+.sunja .f-body{
+  position:absolute; left:50%; bottom:-60px; transform:translateX(-50%);
+  width:560px; height:640px; border-radius:280px 280px 40px 40px;
+  background:
+    radial-gradient(70% 50% at 34% 12%, rgba(255,238,204,.30), rgba(255,238,204,0) 62%),
+    linear-gradient(150deg, #7d8c86 0%, #66736e 46%, #4c5754 100%);
+  box-shadow:inset -30px -40px 80px rgba(0,0,0,.22);
+}
+.sunja .f-apron{
+  position:absolute; left:50%; bottom:-40px; transform:translateX(-50%);
+  width:380px; height:520px; border-radius:150px 150px 30px 30px;
+  background:
+    repeating-linear-gradient(0deg, rgba(0,0,0,.03) 0 2px, rgba(0,0,0,0) 2px 6px),
+    linear-gradient(170deg, #efe8d6 0%, #e2d9c4 50%, #cfc5ac 100%);
+  box-shadow:inset 0 -30px 60px rgba(120,105,80,.18);
+}
+.sunja .f-apron::after{
+  content:""; position:absolute; left:50%; top:-46px; transform:translateX(-50%);
+  width:34px; height:220px; background:rgba(210,198,172,.9); border-radius:8px;
+  box-shadow:0 0 0 1px rgba(0,0,0,.06);
+}
+.sunja .f-neck{
+  position:absolute; left:50%; bottom:590px; transform:translateX(-50%);
+  width:96px; height:100px; background:linear-gradient(180deg, #e0c6a6, #cdb093);
+}
+.sunja .f-head{
+  position:absolute; left:50%; bottom:610px; transform:translateX(-50%);
+  width:250px; height:300px; border-radius:48% 48% 42% 42%;
+  background:
+    radial-gradient(60% 50% at 32% 26%, rgba(255,246,226,.6), rgba(255,246,226,0) 60%),
+    linear-gradient(160deg, #f0d8b8 0%, #e3c6a3 56%, #cdae8c 100%);
+  box-shadow:inset -18px -14px 40px rgba(150,116,84,.28);
+}
+/* 얼굴 좌표 기준 : 머리 250×300, 앞머리 라인 = y 120 */
+.sunja .f-hair{
+  position:absolute; left:50%; top:-14px; transform:translateX(-50%);
+  width:296px; height:150px; border-radius:52% 52% 26% 26%;
+  background:linear-gradient(168deg, #dad8d0 0%, #bcbab1 54%, #9e9c92 100%);
+  box-shadow:0 -6px 26px rgba(255,250,238,.32), inset 0 -18px 26px rgba(120,116,104,.18);
+}
+.sunja .f-hair::before, .sunja .f-hair::after{
+  content:""; position:absolute; top:104px; width:62px; height:112px;
+  background:linear-gradient(180deg, #c9c7bd, #a6a49a); border-radius:26px;
+}
+.sunja .f-hair::before{ left:-10px; transform:rotate(5deg); }
+.sunja .f-hair::after{ right:-10px; transform:rotate(-5deg); }
+.sunja .f-face{ position:absolute; inset:0; }
+
+/* 기본 좌표 — 눈썹 y150 / 눈 y192 / 볼 y222 / 입 y248 */
+.sunja .brow{ position:absolute; display:block; top:150px; width:56px; height:11px; border-radius:6px;
+  background:#6f5e4e; opacity:.62; transform-origin:center center;
+  transition:transform .35s cubic-bezier(.3,0,.2,1), opacity .3s; }
+.sunja .brow.l{ left:34px; } .sunja .brow.r{ right:34px; }
+.sunja .eye{ position:absolute; display:block; top:192px; width:44px; height:16px; border-radius:9px;
+  background:#382d27; opacity:.94;
+  transition:height .3s ease, top .3s ease, border-radius .3s ease; }
+.sunja .eye.l{ left:36px; } .sunja .eye.r{ right:36px; }
+.sunja .mouth{ position:absolute; display:block; left:50%; top:248px; transform:translateX(-50%);
+  width:54px; height:8px; border-radius:4px; background:#5c4739; opacity:.8;
+  transition:width .3s ease, height .3s ease, border-radius .3s ease, top .3s ease; }
+.sunja .f-cheek{
+  position:absolute; left:0; right:0; top:222px; height:60px; opacity:.4;
+  background:
+    radial-gradient(30px 17px at 16% 50%, rgba(202,132,112,.6), rgba(202,132,112,0) 70%),
+    radial-gradient(30px 17px at 84% 50%, rgba(202,132,112,.6), rgba(202,132,112,0) 70%);
+}
+
+/* ---- 표정 4 : 눈·눈썹·입이 각각 다른 방향으로 움직인다 ---- */
+
+/* default — 무표정. 눈썹 평평·흐리게, 눈 수평, 입은 짧은 직선, 볼 흐림 */
+.sunja[data-exp="default"] .brow{ opacity:.58; transform:none; }
+.sunja[data-exp="default"] .eye{ height:15px; top:192px; border-radius:8px; }
+.sunja[data-exp="default"] .mouth{ width:50px; height:7px; top:248px; border-radius:4px; }
+.sunja[data-exp="default"] .f-cheek{ opacity:.30; }
+
+/* surprise — 눈 크게, 눈썹 통째로 위로, 입 동그랗게 벌어짐 */
+.sunja[data-exp="surprise"] .brow{ opacity:.7; transform:translateY(-18px); }
+.sunja[data-exp="surprise"] .eye{ height:34px; top:182px; border-radius:16px; }
+.sunja[data-exp="surprise"] .mouth{ width:46px; height:42px; top:242px; border-radius:50%; opacity:.68; }
+
+/* worry — 눈썹 안쪽이 올라가고, 눈은 가늘게 내려가고, 입은 내려가 굽는다 */
+.sunja[data-exp="worry"] .brow.l{ opacity:.9; transform:rotate(-20deg) translateY(-2px); }
+.sunja[data-exp="worry"] .brow.r{ opacity:.9; transform:rotate(20deg) translateY(-2px); }
+.sunja[data-exp="worry"] .eye{ height:9px; top:200px; }
+.sunja[data-exp="worry"] .mouth{ width:44px; height:9px; top:256px; border-radius:4px 4px 22px 22px; opacity:.66; }
+
+/* smile — 눈썹 살짝 내려가고, 눈이 호선으로 접히고, 입꼬리가 크게 올라간다 */
+.sunja[data-exp="smile"] .brow{ opacity:.62; transform:translateY(6px); }
+.sunja[data-exp="smile"] .eye{ height:13px; border-radius:16px 16px 3px 3px; top:196px; }
+.sunja[data-exp="smile"] .mouth{ width:72px; height:26px; top:240px; border-radius:5px 5px 38px 38px; opacity:.74; }
+.sunja[data-exp="smile"] .f-cheek{ opacity:.92; }
+
+/* 호두 */
+.hodu{ position:absolute; width:210px; height:230px; transition:opacity .4s, transform .4s; }
+.hodu.out{ opacity:0; }
+.hodu .body{
+  position:absolute; left:50%; bottom:0; transform:translateX(-50%);
+  width:190px; height:170px; border-radius:52% 52% 44% 44%;
+  background:linear-gradient(165deg, #6c5b4c 0%, #54453a 60%, #40352c 100%);
+}
+.hodu .head{
+  position:absolute; left:50%; bottom:120px; transform:translateX(-50%);
+  width:132px; height:120px; border-radius:48% 48% 44% 44%;
+  background:linear-gradient(165deg, #776555 0%, #5b4b3f 100%);
+}
+.hodu .ear{ position:absolute; bottom:206px; width:56px; height:56px; background:#54453a;
+  clip-path:polygon(50% 0, 100% 100%, 0 100%); }
+.hodu .ear.l{ left:44px; } .hodu .ear.r{ right:44px; }
+.hodu .eye{ position:absolute; bottom:168px; width:14px; height:14px; border-radius:50%; background:#f3e6c8; opacity:.85; }
+.hodu .eye.l{ left:80px; } .hodu .eye.r{ right:80px; }
+.hodu .tail{
+  position:absolute; right:-16px; bottom:30px; width:120px; height:120px;
+  border:16px solid #54453a; border-color:#54453a transparent transparent transparent;
+  border-radius:50%; transform:rotate(28deg);
+}
+.hodu.walk .tail{ animation:tailSwish 1.4s ease-in-out infinite; }
+@keyframes tailSwish{ 0%,100%{ transform:rotate(28deg) } 50%{ transform:rotate(46deg) } }
+
+/* ================================================================
+   소품 (스테이지 오버레이)
+   ================================================================ */
+.prop{ position:absolute; z-index:14; transition:opacity .5s ease, transform .5s ease; }
+.prop.in{ animation:propIn .55s cubic-bezier(.22,.9,.24,1) both; }
+@keyframes propIn{ from{ opacity:0; transform:translateY(24px) scale(.96) } to{ opacity:1; transform:none } }
+
+/* 수건 — 얼굴을 가리지 않도록 화면 좌측 하단에 든다 */
+.prop-towel{ left:24px; bottom:430px; width:286px; height:196px; transform:rotate(-12deg); }
+.prop-towel i, .prop-towel b{ position:absolute; inset:0; border-radius:18px; display:block; }
+.prop-towel i{ background:linear-gradient(160deg, #fbf4e4, #e6dcc6 60%, #cfc3a8); box-shadow:0 30px 60px -20px rgba(0,0,0,.5); }
+.prop-towel b{ background:repeating-linear-gradient(90deg, rgba(150,130,100,.16) 0 3px, rgba(150,130,100,0) 3px 26px); }
+.prop-towel::after{
+  content:"수건"; position:absolute; left:50%; bottom:-54px; transform:translateX(-50%);
+  font-family:var(--sans); font-size:26px; letter-spacing:.2em; color:rgba(255,248,232,.78);
+}
+
+/* 차 한 잔 */
+.prop-tea{ left:74px; bottom:540px; width:170px; height:210px; }
+.prop-tea .cup{
+  position:absolute; left:0; bottom:0; width:180px; height:160px; border-radius:14px 14px 80px 80px;
+  background:linear-gradient(170deg, #f6ecd6 0%, #ddcfb2 60%, #c1b090 100%);
+  box-shadow:0 24px 50px -18px rgba(0,0,0,.5), inset 0 12px 24px rgba(255,255,255,.6);
+}
+.prop-tea .cup::after{
+  content:""; position:absolute; left:18px; right:18px; top:14px; height:22px; border-radius:50%;
+  background:radial-gradient(circle, #b1794a 0%, #8e5c34 70%); box-shadow:inset 0 4px 10px rgba(0,0,0,.3);
+}
+.prop-tea .st{
+  position:absolute; left:20px; width:140px; height:260px; bottom:150px;
+  background:radial-gradient(closest-side, rgba(255,255,255,.55), rgba(255,255,255,0) 72%);
+  filter:blur(14px); animation:steamUp 5s ease-in-out infinite;
+}
+.prop-tea::after{
+  content:"따뜻한 차"; position:absolute; left:50%; bottom:-56px; transform:translateX(-50%);
+  font-family:var(--sans); font-size:24px; letter-spacing:.18em; color:rgba(255,248,232,.65); white-space:nowrap;
+}
+
+/* 열쇠 */
+.prop-key{ left:70px; bottom:560px; width:300px; height:190px; }
+.prop-key .ring{
+  position:absolute; left:0; top:30px; width:140px; height:140px; border-radius:50%;
+  border:16px solid #c8a86a; box-shadow:0 0 40px rgba(200,168,106,.45), inset 0 0 24px rgba(0,0,0,.2);
+}
+.prop-key .shaft{
+  position:absolute; left:130px; top:88px; width:190px; height:22px; border-radius:6px;
+  background:linear-gradient(180deg, #e0c286, #a8874e);
+}
+.prop-key .bit{
+  position:absolute; left:280px; top:88px; width:34px; height:64px; border-radius:0 0 8px 8px;
+  background:linear-gradient(180deg, #d3b478, #9c7c45);
+}
+.prop-key .bit.b2{ left:250px; height:44px; top:108px; }
+.prop-key::after{
+  content:"방 열쇠"; position:absolute; left:50%; bottom:-46px; transform:translateX(-50%);
+  font-family:var(--sans); font-size:24px; letter-spacing:.18em; color:rgba(255,248,232,.7); white-space:nowrap;
+}
+
+/* ---------- S04 신발 인터랙션 ---------- */
+/* S04 신발 인터랙션 레이아웃은 ui.css 에서 정의한다 */
+
+.hot{
+  position:relative; flex:none; appearance:none; cursor:pointer; border:none; background:none; padding:0;
+  display:flex; flex-direction:column; align-items:center; gap:18px;
+  transition:transform .2s ease; font-family:var(--sans);
+}
+.hot:active{ transform:scale(.97); }
+.hot .ring2{
+  position:absolute; inset:-16px; border-radius:32px; border:3px solid rgba(255,236,198,0);
+  transition:border-color .3s, box-shadow .3s; pointer-events:none;
+}
+.hot:hover .ring2, .hot.lit .ring2{ border-color:rgba(255,214,150,.9); box-shadow:0 0 40px rgba(255,214,150,.5); }
+.hot .cap{
+  font-size:26px; letter-spacing:.12em; color:#f7f0e2; background:rgba(24,20,16,.58);
+  border:1px solid rgba(255,255,255,.24); padding:12px 22px; border-radius:999px;
+  backdrop-filter:blur(8px); white-space:nowrap; display:inline-block; flex:none;
+}
+.hot .ico{ position:relative; }
+
+/* 아웃도어 신발 */
+.ico-sneaker{ width:300px; height:130px; position:relative; }
+.ico-sneaker .sole{
+  position:absolute; left:0; right:0; bottom:0; height:44px; border-radius:22px 22px 16px 16px;
+  background:linear-gradient(180deg, #f2ece0, #c9c0ae);
+}
+.ico-sneaker .up{
+  position:absolute; left:10px; right:10px; bottom:36px; height:86px; border-radius:70px 46px 20px 18px;
+  background:linear-gradient(170deg, #8f9ba8 0%, #63707d 60%, #4a5561 100%);
+  box-shadow:inset 0 10px 24px rgba(255,255,255,.18);
+}
+.ico-sneaker .lace{
+  position:absolute; left:44px; top:24px; width:120px; height:9px; border-radius:5px; background:rgba(240,236,226,.7);
+  box-shadow:0 20px 0 rgba(240,236,226,.55), 0 40px 0 rgba(240,236,226,.4);
+}
+
+/* 실내화 */
+.ico-slipper{ width:260px; height:120px; position:relative; }
+.ico-slipper .sole{
+  position:absolute; left:0; right:0; bottom:0; height:34px; border-radius:18px;
+  background:linear-gradient(180deg, #d8cbb2, #b9aa8e);
+}
+.ico-slipper .up{
+  position:absolute; left:14px; right:14px; bottom:22px; height:80px; border-radius:70px 70px 24px 24px;
+  background:linear-gradient(170deg, #fdf7ea 0%, #ecdfc8 62%, #d6c7ae 100%);
+  box-shadow:inset 0 8px 20px rgba(255,255,255,.7);
+}
+
+/* 가방 */
+.ico-bag{ width:250px; height:280px; position:relative; }
+.ico-bag .b{
+  position:absolute; left:0; right:0; bottom:0; height:200px; border-radius:20px;
+  background:linear-gradient(170deg, #7d6a58 0%, #5c4b3c 60%, #473a2e 100%);
+  box-shadow:inset 0 8px 24px rgba(255,255,255,.10);
+}
+.ico-bag .h{
+  position:absolute; left:50%; top:0; transform:translateX(-50%); width:110px; height:110px;
+  border:12px solid #6a5747; border-bottom:none; border-radius:60px 60px 0 0;
+}
+.ico-bag .s{ position:absolute; left:20px; right:20px; top:70px; height:10px; background:rgba(255,236,198,.35); border-radius:4px; }
+
+/* ---------- S07 사진 핫스팟 ---------- */
+/* 히트 영역은 지정한 % 그대로 — 버튼 크기 = 클릭 영역.
+   보이는 표식(점선 원)은 position:absolute 로 중앙에 띄워 레이아웃·히트 영역에 영향 없음.
+   사진 위에는 글자를 얹지 않는다 — 이름표는 사진 아래 범례(.pin-legend)에 둔다. */
+.pin{
+  position:absolute; appearance:none; cursor:pointer; padding:0; margin:0;
+  border:none; background:transparent; overflow:visible;
+  transition:transform .2s;
+}
+.pin:active{ transform:scale(.985); }
+.pin .dot{
+  /* 표식은 히트 영역의 위쪽 가장자리에 — 사진 속 얼굴을 가리지 않는다 */
+  position:absolute; left:50%; top:10px; transform:translateX(-50%);
+  width:96px; height:96px; border-radius:50%; pointer-events:none;
+  border:4px dashed rgba(255,252,242,.96);
+  background:rgba(26,19,14,.20);
+  box-shadow:0 0 0 3px rgba(26,19,14,.50), 0 10px 30px rgba(0,0,0,.46),
+             inset 0 0 30px rgba(26,19,14,.30), inset 0 0 0 1px rgba(26,19,14,.45);
+  animation:pinPulse 2.8s ease-in-out infinite;
+}
+@keyframes pinPulse{
+  0%,100%{ box-shadow:0 0 0 2px rgba(40,30,20,.22), 0 0 0 0 rgba(255,244,214,.46) }
+  55%{ box-shadow:0 0 0 2px rgba(40,30,20,.22), 0 0 0 22px rgba(255,244,214,0) }
+}
+.pin .dot::after{
+  content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  width:16px; height:16px; border-radius:50%; background:rgba(255,250,236,.9);
+  box-shadow:0 0 18px rgba(255,246,214,.9);
+}
+.pin.done .dot{
+  border-style:solid; border-color:rgba(206,232,204,.95);
+  background:rgba(63,102,70,.42); animation:none;
+}
+.pin.done .dot::after{
+  width:auto; height:auto; border-radius:0; background:none; box-shadow:none;
+  content:"✓"; font-family:var(--sans); font-size:44px; line-height:1; color:#eef7e6;
+}
+
+/* 사진 아래 범례 : 이름표는 여기(사진 바깥)에만 있다 */
+.pin-legend{
+  position:absolute; left:50%; transform:translateX(-50%);
+  display:flex; gap:14px; justify-content:center; align-items:center; z-index:9;
+  white-space:nowrap;
+}
+.pin-legend button{
+  appearance:none; cursor:pointer; display:flex; align-items:center; gap:12px;
+  background:rgba(24,19,15,.68); border:1px solid rgba(255,246,224,.36);
+  border-radius:999px; padding:16px 24px 16px 18px;
+  font-family:var(--sans); font-size:28px; line-height:1; color:#fdf7ea; letter-spacing:.01em;
+  white-space:nowrap; backdrop-filter:blur(10px);
+  transition:background .18s, border-color .18s;
+}
+.pin-legend button:hover{ background:rgba(24,19,15,.8); }
+.pin-legend button .ring{
+  width:30px; height:30px; border-radius:50%; border:3px dashed rgba(255,250,236,.8); flex:none;
+}
+.pin-legend button.done{ opacity:.5; }
+.pin-legend button.done .ring{ border-style:solid; border-color:rgba(206,232,204,.9); }
+.pin-legend button.done .ring::after{
+  content:"✓"; display:grid; place-items:center; height:100%;
+  font-size:20px; color:#eaf4e4;
+}
+
+.photo-counter{
+  position:absolute; left:44px; top:150px; z-index:22;
+  display:flex; align-items:center; gap:16px;
+  background:rgba(22,18,15,.42); border:1px solid rgba(255,255,255,.24);
+  padding:16px 24px; border-radius:999px; backdrop-filter:blur(14px);
+  font-family:var(--sans); font-size:26px; color:#f7f0e2;
+}
+.photo-counter b{ font-family:var(--serif); font-size:32px; font-weight:400; }
+.photo-counter .bar{ width:120px; height:6px; border-radius:6px; background:rgba(255,255,255,.22); overflow:hidden; }
+.photo-counter .bar i{ display:block; height:100%; width:0%; background:linear-gradient(90deg, #e0a862, #f3d6a4); transition:width .4s ease; }
+.photo-counter.full{ background:rgba(95,132,100,.6); border-color:rgba(255,255,255,.4); }
+
+/* ---------- S06 방 조사 ---------- */
+.roomhot{
+  position:absolute; appearance:none; cursor:pointer; border:2px dashed rgba(255,246,226,.45);
+  background:rgba(255,246,226,.10); border-radius:24px; padding:0;
+  transition:background .22s, border-color .22s, transform .2s;
+}
+.roomhot:hover{ background:rgba(255,246,226,.20); border-color:rgba(255,246,226,.9); }
+.roomhot:active{ transform:scale(.98); }
+.roomhot span{
+  position:absolute; left:50%; bottom:-52px; transform:translateX(-50%); white-space:nowrap;
+  font-family:var(--sans); font-size:24px; letter-spacing:.12em; color:#fbf4e4;
+  background:rgba(22,18,15,.55); padding:8px 18px; border-radius:999px;
+}
+.roomhot.done{ border-style:solid; border-color:rgba(95,132,100,.9); background:rgba(95,132,100,.18); }
+.roomhot.done span::after{ content:" ✓"; color:#bfe0c4; }
+.roomhot.pulse{ animation:roomPulse 2s ease-in-out infinite; }
+@keyframes roomPulse{
+  0%,100%{ box-shadow:0 0 0 0 rgba(255,236,198,.5) }
+  50%{ box-shadow:0 0 0 22px rgba(255,236,198,0) }
+}
+
+/* ---------- 대문 인터랙션 ---------- */
+.gatehot{
+  position:absolute; appearance:none; cursor:pointer; border:2px dashed rgba(255,246,226,.5);
+  background:rgba(255,246,226,.08); border-radius:24px; transition:background .2s, border-color .2s;
+}
+.gatehot:hover{ background:rgba(255,246,226,.18); border-color:rgba(255,246,226,.9); }
+.gatehot span{
+  position:absolute; left:50%; bottom:-54px; transform:translateX(-50%); white-space:nowrap;
+  font-family:var(--sans); font-size:24px; letter-spacing:.1em; color:#fbf4e4;
+  background:rgba(22,18,15,.55); padding:8px 18px; border-radius:999px;
+}
+
+/* ---------- 보상 카드 ---------- */
+.reward{
+  position:absolute; inset:0; z-index:60; overflow-y:auto; overflow-x:hidden;
+  background-color:#14171a;
+  background-image:linear-gradient(180deg, #1d211f 0%, #16191a 52%, #101212 100%);
+  padding:78px 66px 64px; color:#f4ecdc; animation:fadeIn .55s ease;
+  -webkit-overflow-scrolling:touch;
+}
+.reward .eyebrow{ font-size:22px; letter-spacing:.42em; color:rgba(244,236,220,.44); margin:0 0 18px; }
+.reward h1{ font-family:var(--serif); font-size:68px; font-weight:400; margin:0; line-height:1.16; letter-spacing:-.01em; }
+.reward .lede{ font-family:var(--serif); font-size:30px; color:rgba(244,236,220,.6); margin:16px 0 0; line-height:1.55; }
+.reward .div{ height:1px; background:rgba(244,236,220,.16); margin:34px 0 8px; }
+
+/* 보상 목록 — 압축 2단 그리드 */
+.rgrid{ display:grid; grid-template-columns:1fr 1fr; gap:0 34px; }
+.rrow{ padding:22px 0 20px; border-bottom:1px solid rgba(244,236,220,.10); }
+.rrow .k{ font-family:var(--sans); font-size:20px; letter-spacing:.16em; color:rgba(244,236,220,.40); margin-bottom:8px; }
+.rrow .v{ font-family:var(--serif); font-size:32px; line-height:1.3; }
+.rrow .v small{ display:block; font-family:var(--sans); font-size:22px; color:rgba(244,236,220,.40); margin-top:6px; letter-spacing:.02em; }
+.rrow.wide{ grid-column:1 / -1; }
+.rrow.new{ animation:rIn .5s cubic-bezier(.22,.9,.24,1); }
+@keyframes rIn{ from{ opacity:0; transform:translateY(14px) } to{ opacity:1; transform:none } }
+
+.nextcard{
+  margin-top:34px; border:1px solid rgba(240,216,168,.26); border-radius:24px; padding:34px 36px 32px;
+  background:linear-gradient(160deg, rgba(240,216,168,.10), rgba(240,216,168,.02));
+}
+.nextcard .t{ font-size:21px; letter-spacing:.24em; color:rgba(240,216,168,.72); margin:0 0 14px; }
+.nextcard h2{ font-family:var(--serif); font-size:44px; font-weight:400; margin:0; line-height:1.3; }
+.nextcard p{ font-size:24px; line-height:1.65; color:rgba(244,236,220,.5); margin:16px 0 0; }
+.nextcard .thread{ margin:20px 0 0; display:flex; flex-direction:column; gap:10px; }
+.nextcard .thread i{ font-style:normal; font-size:25px; line-height:1.5; color:rgba(244,236,220,.7); display:flex; gap:12px; }
+.nextcard .thread i::before{ content:"↳"; color:rgba(240,216,168,.6); }
+.nextcard .thread i b{ font-weight:400; color:#f0d8a8; margin-right:8px; }
+.reward .acts{ display:grid; grid-template-columns:1fr 1fr 1.2fr; gap:12px; margin-top:34px; }
+.reward .acts button{
+  appearance:none; cursor:pointer; border-radius:14px; padding:22px 10px; font-family:var(--sans);
+  font-size:24px; white-space:nowrap; border:1px solid rgba(244,236,220,.24);
+  background:rgba(244,236,220,.06); color:#f4ecdc;
+}
+.reward .acts button.primary{ background:#f0d8a8; color:#241f18; border-color:transparent; }
+
+/* DAY 1 COMPLETE (S09 마지막) */
+.endcard{
+  position:absolute; inset:0; z-index:45; display:grid; place-items:center;
+  background:radial-gradient(70% 50% at 50% 46%, rgba(18,22,30,.82), rgba(8,9,12,.96));
+  animation:fadeIn 1.4s ease both;
+}
+
+
+/* ================================================================
+   정본 이미지 대기 상태 (경로 맵이 비어 있으면 CSS 폴백이 그대로 보인다)
+   ================================================================ */
+.set.has-img{ background:none; }
+.set.has-img > .artimg{ animation:imgIn .7s ease both; }
+@keyframes imgIn{ from{ opacity:0 } to{ opacity:1 } }

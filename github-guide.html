@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="genspark-artifact-type" content="app">
+<title>배포 가이드 · 비 오는 소담길 EP.01</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#241f1b; --ink-soft:#5c534a; --muted:#8b8073;
+  --paper:#f6f1e6; --card:#fffdf7; --line:rgba(36,31,27,.14);
+  --green:#5f8464; --green-dk:#3f5d48; --amber:#c08a44;
+  --serif:"Gowun Batang","Apple SD Gothic Neo",serif;
+  --sans:"Gowun Dodum","Apple SD Gothic Neo",system-ui,sans-serif;
+}
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--sans); line-height:1.7;
+  background-image:radial-gradient(80% 50% at 50% 0%, #fffaf0 0%, rgba(255,250,240,0) 70%);
+}
+.wrap{ max-width:880px; margin:0 auto; padding:72px 28px 120px; }
+
+.eyebrow{ font-size:13px; letter-spacing:.28em; color:var(--green-dk); margin:0 0 18px; }
+h1{ font-family:var(--serif); font-size:44px; line-height:1.25; font-weight:400; margin:0 0 14px; letter-spacing:-.01em; }
+.lede{ font-size:17px; color:var(--ink-soft); margin:0 0 40px; max-width:60ch; }
+
+.pkg{
+  display:flex; align-items:center; gap:18px; padding:20px 22px;
+  background:var(--card); border:1px solid var(--line); border-radius:16px;
+  margin:0 0 44px; box-shadow:0 24px 50px -38px rgba(50,35,20,.5);
+}
+.pkg .ico{
+  width:44px; height:44px; flex:none; border-radius:12px; background:#eef3ea;
+  display:grid; place-items:center; font-size:20px; color:var(--green-dk);
+  border:1px solid rgba(95,132,100,.24);
+}
+.pkg b{ display:block; font-size:16px; }
+.pkg span{ font-size:14px; color:var(--muted); }
+
+h2{
+  font-family:var(--serif); font-size:27px; font-weight:400; margin:56px 0 6px;
+  display:flex; align-items:baseline; gap:12px;
+}
+h2 .n{
+  font-family:var(--sans); font-size:12px; letter-spacing:.16em; color:var(--green);
+  border:1px solid rgba(95,132,100,.35); border-radius:99px; padding:5px 10px;
+  transform:translateY(-3px);
+}
+h2 + .sub{ margin:0 0 20px; color:var(--ink-soft); font-size:15px; }
+
+pre{
+  position:relative; margin:0 0 18px; padding:20px 22px; overflow-x:auto;
+  background:#211d19; color:#efe6d6; border-radius:14px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:13.5px; line-height:1.75;
+  box-shadow:0 26px 50px -40px rgba(30,20,10,.9);
+}
+pre .c{ color:#8d8272; }
+pre .k{ color:#a9c6a4; }
+.copy{
+  position:absolute; right:10px; top:10px; appearance:none; cursor:pointer;
+  background:rgba(255,255,255,.10); color:#e8dfd0; border:1px solid rgba(255,255,255,.16);
+  border-radius:8px; padding:6px 11px; font-family:var(--sans); font-size:12px;
+  transition:background .16s;
+}
+.copy:hover{ background:rgba(255,255,255,.18); }
+
+ol.steps{ list-style:none; counter-reset:s; padding:0; margin:0; }
+ol.steps li{
+  counter-increment:s; position:relative; padding:0 0 20px 46px; font-size:15.5px;
+}
+ol.steps li::before{
+  content:counter(s); position:absolute; left:0; top:1px;
+  width:28px; height:28px; border-radius:50%; display:grid; place-items:center;
+  background:#fff; border:1px solid var(--line); color:var(--green-dk);
+  font-size:13px; font-weight:700;
+}
+ol.steps li b{ color:var(--ink); }
+
+table{
+  width:100%; border-collapse:collapse; font-size:14.5px; margin:0 0 8px;
+  background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden;
+}
+thead th{
+  text-align:left; font-weight:400; font-size:12px; letter-spacing:.12em; color:var(--muted);
+  background:#f2ecdf; padding:12px 16px; border-bottom:1px solid var(--line);
+}
+tbody td{ padding:13px 16px; border-bottom:1px solid rgba(36,31,27,.07); vertical-align:top; }
+tbody tr:last-child td{ border-bottom:none; }
+tbody td:first-child{ font-family:ui-monospace,Menlo,monospace; font-size:13px; color:var(--green-dk); white-space:nowrap; }
+
+.note{
+  border-left:2px solid var(--amber); padding:4px 0 4px 18px; margin:16px 0 26px;
+  color:var(--ink-soft); font-size:15px;
+}
+.note b{ color:var(--ink); }
+
+.warn{
+  background:#fdf6e9; border:1px solid rgba(192,138,68,.30); border-radius:14px;
+  padding:18px 20px; font-size:15px; color:#6b5334; margin:0 0 26px;
+}
+.warn b{ color:#573f21; }
+
+.tabs{ display:flex; gap:8px; margin:0 0 24px; }
+.tabs button{
+  appearance:none; cursor:pointer; border:1px solid var(--line); background:#fff;
+  border-radius:99px; padding:10px 18px; font-family:var(--sans); font-size:14px;
+  color:var(--ink-soft); transition:.16s;
+}
+.tabs button[aria-selected="true"]{ background:#211d19; color:#f4ece0; border-color:#211d19; }
+.panel[hidden]{ display:none; }
+
+footer{
+  margin-top:72px; padding-top:24px; border-top:1px solid var(--line);
+  font-size:13.5px; color:var(--muted);
+}
+kbd{
+  font-family:ui-monospace,Menlo,monospace; font-size:12.5px; background:#fff;
+  border:1px solid var(--line); border-bottom-width:2px; border-radius:6px; padding:2px 7px;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="eyebrow">DEPLOY GUIDE</p>
+  <h1>비 오는 소담길을<br>깃허브에 올려 공유하기</h1>
+  <p class="lede">
+    앱은 정적 파일 묶음입니다. 빌드도, 서버도 필요 없습니다.
+    아래 순서대로 폴더를 올리면 주소 하나로 열리는 앱이 됩니다.
+  </p>
+
+  <div class="pkg">
+    <div class="ico">▣</div>
+    <div>
+      <b>sodamgil-app</b>
+      <span>index.html · admin.html · app/ · assets/ · .gitignore · .nojekyll · README.md</span>
+    </div>
+  </div>
+
+  <h2><span class="n">01</span>저장소 준비</h2>
+  <p class="sub">깃허브에서 빈 저장소를 하나 만들고, 받은 폴더를 그 안에서 초기화합니다.</p>
+
+  <ol class="steps">
+    <li>깃허브 → <b>New repository</b> → 이름 입력(예: <code>sodamgil-ep01</code>) → <b>Public</b> → Create.</li>
+    <li>README·gitignore·license 는 <b>추가하지 마세요.</b> 폴더에 이미 들어 있습니다.</li>
+    <li>터미널에서 내려받은 폴더로 이동해 아래 명령을 순서대로 실행합니다.</li>
+  </ol>
+
+<pre><button class="copy" type="button">복사</button><span class="c"># 압축을 푼 폴더로 이동</span>
+cd ~/Downloads/sodamgil-app
+
+<span class="c"># 저장소 초기화 후 첫 커밋</span>
+git init
+git add .
+git commit -m "EP01 DAY 1 playable prototype"
+git branch -M main
+
+<span class="c"># 내 저장소 연결 (주소는 본인 것으로)</span>
+git remote add origin https://github.com/<span class="k">&lt;계정&gt;</span>/<span class="k">&lt;저장소&gt;</span>.git
+git push -u origin main</pre>
+
+  <div class="note">
+    <b>이미 저장소를 만들었다면</b> <code>git init</code> 대신 <code>git clone</code> 으로 받은 뒤,
+    그 폴더에 <code>sodamgil-app</code> 안의 파일을 복사해 넣어도 됩니다.
+  </div>
+
+  <h2><span class="n">02</span>깃허브 페이지로 열기</h2>
+  <p class="sub">푸시만 하면 정적 호스팅이 따라옵니다. 설정 두 칸이면 끝입니다.</p>
+
+  <ol class="steps">
+    <li>저장소 → <b>Settings</b> → 왼쪽 <b>Pages</b>.</li>
+    <li>Source: <b>Deploy from a branch</b> / Branch: <code>main</code> / Folder: <code>/ (root)</code> → <b>Save</b>.</li>
+    <li>1~2분 뒤 <code>https://&lt;계정&gt;.github.io/&lt;저장소&gt;/</code> 가 열립니다.</li>
+  </ol>
+
+  <table>
+    <thead><tr><th>주소</th><th>화면</th></tr></thead>
+    <tbody>
+      <tr><td>/</td><td>앱 시작 화면 → S01~S09 → 보상 → DAY 2 예고</td></tr>
+      <tr><td>/admin.html</td><td>관리자 페이지 (유저 관리 · 앱 관리 · 데이터)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warn">
+    <b>비공개 저장소는 무료 Pages가 막힙니다.</b> 테스터에게만 주려면 저장소는 공개로 두고
+    Netlify 비밀번호 보호를 쓰거나, 초대 코드 화면을 넣는 편이 빠릅니다.
+  </div>
+
+  <h2><span class="n">03</span>Netlify로 열기</h2>
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-p="drop">드래그 앤 드롭</button>
+    <button role="tab" aria-selected="false" data-p="git">깃허브 연동</button>
+  </div>
+
+  <div class="panel" data-p="drop">
+    <ol class="steps">
+      <li><b>app.netlify.com/drop</b> 에 접속합니다.</li>
+      <li>압축을 푼 <b>sodamgil-app 폴더 자체</b>를 화면에 끌어다 놓습니다.</li>
+      <li>몇 초 뒤 <code>https://&lt;무작위&gt;.netlify.app</code> 주소가 나옵니다.</li>
+    </ol>
+  </div>
+
+  <div class="panel" data-p="git" hidden>
+    <ol class="steps">
+      <li>Netlify → <b>Add new site</b> → <b>Import an existing project</b> → GitHub.</li>
+      <li>저장소를 고르면 빌드 설정이 나옵니다. Build command는 <b>비움</b>, Publish directory는 <code>/</code>.</li>
+      <li>Deploy. 이후 <code>main</code> 에 푸시할 때마다 자동 배포됩니다.</li>
+    </ol>
+    <div class="note">
+      폴더의 <code>netlify.toml</code> 이 같은 값을 이미 담고 있어, 그대로 두면 자동으로 인식됩니다.
+    </div>
+  </div>
+
+  <h2><span class="n">04</span>올린 뒤 확인할 것</h2>
+  <p class="sub">세 가지만 보면 됩니다.</p>
+
+  <ol class="steps">
+    <li>이름을 넣고 <b>이야기 시작하기</b> → 첫 대사가 뜨는지.</li>
+    <li>S03 대문 앞에서 순자 그림이 <b>투명 배경</b>으로 서는지.</li>
+    <li>S07 사진이 화면 폭의 85%로 크게 뜨고, 점선 원과 아래 범례가 눌리는지.</li>
+  </ol>
+
+  <div class="note">
+  <b>파일이 빠지면 그림이 안 뜹니다.</b> 특히 <code>assets/art/</code> 의 11개 파일
+  (순자 표정 4종, 호두 3종, S07 사진, DAY 2 카페 2장, 비행기 영상)이 함께 올라갔는지 확인하세요.
+  </div>
+
+  <h2><span class="n">05</span>지금 구조에서의 한계</h2>
+  <p class="sub">프로토타입 단계에서 반드시 알고 있어야 할 두 가지입니다.</p>
+
+  <table>
+    <thead><tr><th>항목</th><th>현재 동작</th></tr></thead>
+    <tbody>
+      <tr><td>계정</td><td>브라우저마다 따로 생성. 서버 인증 없음.</td></tr>
+      <tr><td>진행 저장</td><td>localStorage. 기기를 바꾸면 이어지지 않음.</td></tr>
+      <tr><td>관리자</td><td>그 브라우저에서 플레이한 기록만 보임.</td></tr>
+      <tr><td>접근 제어</td><td>링크를 아는 사람은 누구나 열 수 있음.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warn">
+    테스터 5명의 기록을 한 화면에서 모아 보려면 서버가 필요합니다.
+    Google·Apple 로그인과 계정별 저장은 다음 단계 작업입니다.
+  </div>
+
+  <h2><span class="n">06</span>자주 막히는 곳</h2>
+
+  <table>
+    <thead><tr><th>증상</th><th>원인 / 해결</th></tr></thead>
+    <tbody>
+      <tr><td>화면이 검게만 나옴</td><td>화면 배율을 0으로 잡는 경우. 최신 <code>app/engine.js</code> 인지 확인.</td></tr>
+      <tr><td>404</td><td>저장소 루트에 <code>index.html</code> 이 있는지. 폴더째 한 단계 더 들어가 있으면 안 됩니다.</td></tr>
+      <tr><td>그림만 안 뜸</td><td><code>assets/art/</code> 누락. 대소문자까지 정확히.</td></tr>
+      <tr><td>관리자 비어 있음</td><td>정상입니다. 그 브라우저에서 한 번 플레이해야 목록에 뜹니다.</td></tr>
+      <tr><td>소리가 안 남</td><td>브라우저가 첫 터치 전 자동재생을 막습니다. 시작 버튼을 누른 뒤 <kbd>소리</kbd> 확인.</td></tr>
+    </tbody>
+  </table>
+
+  <footer>
+    저장소에 함께 들어 있는 <code>README.md</code> 에 같은 내용이 문서로 정리되어 있습니다.
+  </footer>
+</div>
+
+<script>
+document.querySelectorAll('.copy').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const pre = btn.parentElement;
+    const text = pre.innerText.replace(/^복사\s*/, '');
+    try {
+      await navigator.clipboard.writeText(text);
+      btn.textContent = '복사됨';
+    } catch (e) {
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); btn.textContent = '복사됨'; } catch (e2) { btn.textContent = '복사 실패'; }
+      ta.remove();
+    }
+    setTimeout(() => { btn.textContent = '복사'; }, 1800);
+  });
+});
+
+document.querySelectorAll('.tabs button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', String(b === btn)));
+    document.querySelectorAll('.panel').forEach(p => { p.hidden = p.dataset.p !== btn.dataset.p; });
+  });
+});
+</script>
+</body>
+</html>
