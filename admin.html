@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="genspark-artifact-type" content="app">
+<title>EP01 관리자 — 서울살이, 서른 날</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app/admin.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">EP01 관리자<small>서울살이, 서른 날 · 비 오는 소담길</small></div>
+    <div class="sp">
+      <span class="pill" id="modePill">프로토타입 데이터</span>
+      <a class="btn sm" href="index.html">앱으로</a>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab" role="tab" data-tab="users" aria-selected="true">유저 관리</button>
+    <button class="tab" role="tab" data-tab="app" aria-selected="false">앱 관리</button>
+    <button class="tab" role="tab" data-tab="data" aria-selected="false">데이터</button>
+  </nav>
+
+  <!-- ============================= 유저 관리 ============================= -->
+  <section class="panel" id="p-users">
+    <div class="stats" id="stats"></div>
+
+    <div class="split">
+      <div class="card">
+        <div class="card-h"><h2>유저</h2><span class="n" id="userCount"></span></div>
+        <div class="card-b" style="overflow:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>이름</th><th>로그인</th><th>진행</th><th>DAY 1</th><th>최근 접속</th>
+              </tr>
+            </thead>
+            <tbody id="userRows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card" id="detailCard">
+        <div class="card-h"><h2 id="dName">유저를 선택하세요</h2><span class="n" id="dId"></span></div>
+        <div class="card-b pad" id="detailBody">
+          <div class="empty"><b>왼쪽에서 유저를 고르세요</b>스토리 스토어와 학습 스토어를 나눠서 보여 줍니다. 학습 값은 내부 기록 전용입니다.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= 앱 관리 ============================= -->
+  <section class="panel" id="p-app" hidden>
+    <div class="split">
+      <div class="card">
+        <div class="card-h"><h2>에피소드</h2><span class="n">보상 화면 · 학습 시트에 표시</span></div>
+        <div class="card-b pad">
+          <div class="row2">
+            <div class="field"><label>시리즈</label><input id="epSeries" type="text"></div>
+            <div class="field"><label>에피소드 번호</label><input id="epNo" type="text"></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label>제목</label><input id="epTitle" type="text"></div>
+            <div class="field"><label>DAY</label><input id="epDay" type="text"></div>
+          </div>
+          <div class="field"><label>다음 이야기</label><input id="epNext" type="text"></div>
+
+          <div class="sec-t" style="margin-top:26px">앱 설정</div>
+          <div class="switch">
+            <div class="lab">번역 기본 켜기<span class="hint">앱을 처음 열 때 영어 병기를 켜 둡니다.</span></div>
+            <button class="toggle" id="swTrans" aria-pressed="false" type="button"><i></i></button>
+          </div>
+          <div class="switch">
+            <div class="lab">장면 진입 시 힌트 자동 열기<span class="hint">1단계 힌트 시트를 자동으로 띄웁니다.</span></div>
+            <button class="toggle" id="swHint" aria-pressed="false" type="button"><i></i></button>
+          </div>
+          <div class="field" style="margin-top:16px">
+            <label>조사 카드 자동 소멸 (ms)</label>
+            <input id="cardMs" type="number" min="1500" max="12000" step="100">
+          </div>
+
+          <div class="acts">
+            <button class="btn primary" id="saveApp" type="button">저장</button>
+            <button class="btn" id="resetApp" type="button">기본값으로</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><h2>오늘 배운 것</h2><span class="n">보상 화면 → 오늘 배운 것</span></div>
+        <div class="card-b pad">
+          <div class="sec-t" style="margin-top:0">단어</div>
+          <div id="vocabList"></div>
+          <button class="btn sm" id="addVocab" type="button" style="margin-top:10px">+ 단어 추가</button>
+
+          <div class="sec-t">문장 패턴</div>
+          <div id="gramList"></div>
+          <button class="btn sm" id="addGram" type="button" style="margin-top:10px">+ 패턴 추가</button>
+
+          <div class="acts">
+            <button class="btn primary" id="saveLearn" type="button">저장</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= 데이터 ============================= -->
+  <section class="panel" id="p-data" hidden>
+    <div class="split">
+      <div class="card">
+        <div class="card-h"><h2>내보내기</h2><span class="n">유저 · 콘텐츠</span></div>
+        <div class="card-b pad">
+          <p style="font-size:15px; line-height:1.7; color:var(--ink-soft); margin:0 0 14px">
+            이 브라우저에 저장된 유저 목록과 앱 콘텐츠를 JSON 으로 내려받습니다. 다른 기기로 옮길 때 쓰세요.
+          </p>
+          <div class="acts">
+            <button class="btn primary" id="expBtn" type="button">JSON 내려받기</button>
+            <button class="btn" id="copyBtn" type="button">클립보드 복사</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><h2>가져오기</h2><span class="n">덮어쓰기 주의</span></div>
+        <div class="card-b pad">
+          <div class="field">
+            <label>JSON 붙여넣기</label>
+            <textarea id="impBox" placeholder='{"users":{...},"content":{...}}'></textarea>
+          </div>
+          <div class="acts">
+            <button class="btn" id="impBtn" type="button">가져오기</button>
+            <button class="btn danger" id="wipeBtn" type="button">유저 전체 삭제</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="app/content.js"></script>
+<script src="app/auth.js"></script>
+<script src="app/data.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

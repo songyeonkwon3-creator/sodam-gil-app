@@ -1,0 +1,262 @@
+/* ==========================================================================
+   ui.css — 상호작용 UI 부품 (조사 카드 · 신발 · 방 · 사진 · 자기소개)
+   ========================================================================== */
+
+/* ---------- 정본 이미지 (경로가 채워지면 CSS 레이어 위에 얹힌다) ---------- */
+.set > .artimg{
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+  display:block; z-index:0; pointer-events:none;
+}
+/* 이미지가 들어온 세트에서는 구조 레이어를 숨기고 빛·비 효과만 남긴다 */
+/* 사진 세트의 카드·힌트는 배경 이미지 위에서도 그대로 남는다 */
+/* S07 사진 세트는 카드 안에 이미지가 들어가므로 구조 레이어를 숨기지 않는다 */
+.set.has-img > *:not(.artimg):not(.fx):not(.photo-wrap):not(.photo-hint):not(.pin-layer){ display:none; }
+
+/* 사진 앞면 : 실제 사진 이미지가 카드 액자를 채운다 */
+.set-photo .face .shot{
+  position:absolute; inset:44px; width:calc(100% - 88px); height:calc(100% - 88px);
+  object-fit:cover; object-position:center; display:block; border-radius:2px;
+}
+.set-photo .face::after{ z-index:2; }
+/* 이미지가 있으면 CSS 도형은 이미 제거됨 — 액자 배경만 남긴다 */
+.set-photo.photo-img .face{ background:#efe6d2; }
+
+/* 핫스팟 레이어 : 카드(.photo-wrap) 기준 % 좌표 */
+.set-photo .pin-layer{
+  position:absolute; inset:0; z-index:6; pointer-events:none;
+}
+.set-photo .pin-layer .pin{ pointer-events:auto; }
+.set.has-img{ background:none; }
+
+/* 피겨 이미지의 크기·정렬은 art.css 가 정한다 (여기서는 기본값만) */
+.fig.has-img > .figimg{
+  width:auto; height:100%;
+  object-fit:contain; object-position:bottom center; display:block;
+}
+
+/* ---------- 무대 하위 레이어 ---------- */
+.figs{ position:absolute; inset:0; z-index:10; pointer-events:none; }
+.props{ position:absolute; inset:0; z-index:14; pointer-events:none; }
+.figs > *, .props > *{ pointer-events:none; }
+
+.notelayer{ position:absolute; inset:0; z-index:29; pointer-events:none; }
+.notelayer > *{ pointer-events:auto; }
+
+/* ---------- 조사 / 반응 카드 ---------- */
+.insight{
+  position:absolute; left:52px; right:52px; bottom:210px; z-index:28;
+  background:rgba(250,245,235,.982); border:1px solid rgba(255,255,255,.6);
+  border-radius:28px; padding:32px 36px 28px;
+  box-shadow:0 40px 90px -34px rgba(20,14,8,.6);
+  opacity:0; transform:translateY(18px);
+  transition:opacity .3s ease, transform .3s cubic-bezier(.22,.9,.24,1);
+  cursor:pointer;
+}
+.insight.in{ opacity:1; transform:none; }
+.insight .in-k{
+  font-size:23px; letter-spacing:.16em; color:var(--green-dk); margin-bottom:14px;
+}
+.insight .in-t{
+  margin:0; font-family:var(--serif); font-size:44px; line-height:1.52; color:var(--ink);
+  text-wrap:pretty; word-break:keep-all;
+}
+.insight .in-en{
+  margin:16px 0 0; font-family:var(--sans); font-size:46px; line-height:1.36; color:rgba(36,31,27,.66); display:none;
+}
+.insight .in-en.on{ display:block; }
+.insight .in-btn{
+  margin-top:22px; appearance:none; cursor:pointer; border:none;
+  background:var(--green-dk); color:#f7f2e6; border-radius:14px; padding:22px 30px;
+  font-family:var(--sans); font-size:28px; width:100%;
+}
+.insight .in-tap{
+  margin-top:18px; font-size:22px; letter-spacing:.1em; color:rgba(36,31,27,.36); text-align:right;
+}
+
+/* ---------- A01 신발 ---------- */
+/* ---------- S04 신발 인터랙션 : 무대 전체를 쓰는 세로 플렉스 ---------- */
+.shoes{
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  justify-content:flex-end; align-items:center;
+  padding:0 44px 52px;
+  background:linear-gradient(180deg, rgba(14,11,9,0) 38%, rgba(14,11,9,.52) 66%, rgba(14,11,9,.92) 100%);
+}
+.shoes .lbl{
+  margin-bottom:44px; text-align:center;
+  font-family:var(--serif); font-size:54px; line-height:1.35; color:#fdf7ea;
+  text-shadow:0 6px 30px rgba(0,0,0,.9);
+}
+.shoes .lbl small{
+  display:block; font-family:var(--sans); font-size:28px; letter-spacing:.16em;
+  color:rgba(253,247,234,.66); margin-top:14px;
+}
+
+/* 세 버튼이 좌→우로 나란히 : 신발 · 실내화 · 가방 */
+.shoes .row{
+  display:flex; flex-direction:row; flex-wrap:nowrap;
+  align-items:flex-end; justify-content:center;
+  gap:48px; width:100%;
+}
+.shoes .row > .hot{ width:auto; }
+
+/* 아이콘을 1080 폭에 맞춰 축소 (겹침 0) */
+.shoes .ico-sneaker{ width:248px; height:110px; }
+.shoes .ico-slipper{ width:214px; height:102px; }
+.shoes .ico-bag{ width:182px; height:212px; }
+.shoes .ico-sneaker .sole{ height:38px; }
+.shoes .ico-sneaker .up{ bottom:32px; height:74px; }
+.shoes .ico-sneaker .lace{ left:36px; top:20px; width:100px; height:8px; }
+.shoes .ico-slipper .sole{ height:30px; }
+.shoes .ico-slipper .up{ bottom:18px; height:68px; }
+.shoes .ico-bag .b{ height:152px; }
+.shoes .ico-bag .h{ width:88px; height:86px; border-width:10px; }
+.shoes .ico-bag .s{ top:56px; }
+
+.shoes-fb{
+  margin-top:42px; width:100%; min-height:164px;
+  background:rgba(250,245,235,.97); border-radius:26px; padding:26px 30px;
+  box-shadow:0 30px 70px -30px rgba(0,0,0,.6);
+  opacity:0; transition:opacity .28s;
+}
+.shoes-fb.in{ opacity:1; }
+.shoes-fb:not(.in){ background:transparent; box-shadow:none; }
+.shoes-fb .who{
+  display:inline-block; font-size:23px; letter-spacing:.14em; color:var(--green-dk);
+  background:rgba(95,132,100,.12); padding:6px 15px; border-radius:7px; margin-bottom:12px;
+}
+.shoes-fb .tx{
+  display:block; font-family:var(--serif); font-size:42px; line-height:1.5; color:var(--ink);
+}
+.shoes-fb .en{ display:none; font-size:44px; line-height:1.38; color:rgba(36,31,27,.64); margin-top:12px; }
+.shoes-fb .en.on{ display:block; }
+.hot.gone .cap{ background:rgba(95,132,100,.8); }
+.hot .cap{ flex:none; }
+.stage.shoes-mode .fig{ opacity:.18; }
+.stage.shoes-mode .shoes .lbl{ text-shadow:0 6px 26px rgba(0,0,0,.9); }
+
+/* ---------- A02 방 ---------- */
+.room-ui{ position:absolute; inset:0; }
+.room-hint{
+  position:absolute; left:0; right:0; bottom:92px; text-align:center;
+  font-size:27px; letter-spacing:.06em; color:rgba(253,247,234,.72);
+  text-shadow:0 4px 20px rgba(0,0,0,.7);
+}
+/* 책상 단서를 본 뒤 뜨는 액션 — 이 버튼을 눌러야 방을 떠난다 */
+.room-action{
+  position:absolute; left:60px; right:60px; bottom:196px; z-index:26;
+  display:flex; align-items:center; justify-content:space-between; gap:20px;
+  background:rgba(24,19,15,.80); border:1px solid rgba(255,246,224,.32);
+  border-radius:22px; padding:22px 24px 22px 28px;
+  box-shadow:0 30px 70px -28px rgba(0,0,0,.72);
+  backdrop-filter:blur(14px);
+  animation:raIn .34s cubic-bezier(.22,.9,.24,1);
+}
+.room-action[hidden]{ display:none; }
+@keyframes raIn{ from{ opacity:0; transform:translateY(14px) } to{ opacity:1; transform:none } }
+.room-action .ra-tx{
+  font-family:var(--serif); font-size:34px; line-height:1.35; color:#fdf7ea;
+}
+.room-action .ra-btn{
+  appearance:none; cursor:pointer; flex:none;
+  background:#efe7d3; color:#3b3227; border:none; border-radius:16px;
+  padding:20px 30px; font-family:var(--sans); font-size:30px; letter-spacing:.02em;
+  box-shadow:0 12px 30px -12px rgba(0,0,0,.6);
+  transition:transform .16s, background .18s;
+}
+.room-action .ra-btn:active{ transform:scale(.97); }
+
+/* ---------- I01 사진 ---------- */
+.pin-layer{ position:absolute; inset:0; }
+
+/* ---------- L02 자기소개 ---------- */
+.compose{
+  position:absolute; left:48px; right:48px; bottom:96px; z-index:28;
+  background:rgba(250,245,235,.97); border:1px solid rgba(255,255,255,.6);
+  border-radius:34px; padding:34px 36px 32px;
+  box-shadow:0 40px 90px -34px rgba(20,14,8,.6);
+}
+/* 조립 UI 가 열려도 캐릭터는 뒤에 살아 있다 (CSS 실루엣 시절의 0.16 은 상세 일러스트에 과했다).
+   가독성은 카드의 불투명 배경 + 그림자 + 살짝 낮춘 채도로 확보한다. */
+.stage.compose-mode .fig{
+  opacity:.92; filter:saturate(.92) brightness(.94);
+  transition:opacity .3s, filter .3s;
+}
+.cp-q{
+  font-family:var(--serif); font-size:38px; line-height:1.45; color:var(--ink);
+  padding-bottom:22px; margin-bottom:22px; border-bottom:1px solid rgba(36,31,27,.12);
+}
+.cp-q .who{
+  display:inline-block; font-family:var(--sans); font-size:22px; letter-spacing:.14em;
+  color:var(--green-dk); background:rgba(95,132,100,.12); padding:6px 14px;
+  border-radius:7px; margin-right:14px;
+}
+.cp-slots{ display:flex; gap:12px; margin-bottom:22px; }
+.cp-slots .slot{
+  flex:1; min-height:104px; border-radius:18px; border:2px dashed rgba(36,31,27,.22);
+  display:grid; place-items:center; font-family:var(--serif); font-size:40px;
+  color:rgba(36,31,27,.34); padding:8px; text-align:center; transition:all .2s;
+}
+.cp-slots .slot.filled{
+  border-style:solid; border-color:rgba(95,132,100,.6); background:rgba(95,132,100,.10); color:var(--ink);
+}
+.cp-slots .slot i{
+  font-style:normal; font-family:var(--sans); font-size:28px; color:rgba(36,31,27,.20);
+}
+.cp-slots .slot.filled i{ display:none; }
+.cp-tokens{
+  display:grid; grid-template-columns:repeat(3, 1fr); gap:12px;
+}
+.cp-tokens button{
+  appearance:none; cursor:pointer; border:1px solid rgba(36,31,27,.18);
+  background:rgba(255,255,255,.82); border-radius:18px; padding:20px 12px;
+  font-family:var(--serif); font-size:34px; line-height:1.2; color:var(--ink);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  transition:transform .14s, background .18s, border-color .18s;
+}
+.cp-tokens button:active{ transform:scale(.96); background:rgba(95,132,100,.12); }
+.cp-tokens button.no{
+  background:rgba(201,138,128,.22); border-color:rgba(165,96,79,.55); color:#8d4a3b;
+  animation:noShake .42s cubic-bezier(.36,.07,.19,.97);
+}
+@keyframes noShake{
+  0%,100%{ transform:translateX(0) } 22%{ transform:translateX(-9px) }
+  48%{ transform:translateX(8px) } 74%{ transform:translateX(-4px) }
+}
+.cp-fb{
+  margin-top:22px; font-size:27px; line-height:1.45; color:rgba(36,31,27,.58);
+  min-height:80px; display:flex; align-items:flex-start;
+}
+.cp-fb .warn{ color:#a5604f; }
+.cp-acts{ display:flex; gap:12px; margin-top:22px; }
+.cp-acts button{
+  appearance:none; cursor:pointer; border-radius:16px; padding:24px; font-family:var(--sans);
+  font-size:26px; border:1px solid rgba(36,31,27,.18); background:rgba(255,255,255,.7); color:var(--ink);
+}
+.cp-acts .cp-ok{ flex:2; background:var(--green-dk); color:#f7f2e6; border-color:transparent; }
+.cp-acts .cp-ok:disabled{ opacity:.36; }
+.cp-acts .cp-reset{ flex:1; }
+
+/* ---------- 선택지 부속 ---------- */
+.shoes .hot .cap{
+  font-size:26px; line-height:1.2; padding:13px 26px; white-space:nowrap;
+  display:inline-block; width:auto; flex:none;
+}
+.ch-hint{
+  margin-top:10px; font-size:26px; color:rgba(36,31,27,.5); letter-spacing:.02em; text-align:center;
+}
+
+/* ---------- 시트 부속 ---------- */
+.sheet-lede{ margin:0 0 26px; font-size:25px; color:rgba(36,31,27,.5); line-height:1.6; }
+.sheet-head .mini{
+  font-size:20px; letter-spacing:.16em; color:rgba(36,31,27,.36);
+  border:1px solid var(--line); padding:5px 12px; border-radius:999px;
+}
+.tag-lite{
+  font-family:var(--sans); font-size:18px; letter-spacing:.1em; font-weight:400;
+  color:var(--green-dk); background:rgba(95,132,100,.12); padding:4px 10px; border-radius:6px;
+  margin-left:8px; vertical-align:2px;
+}
+.tag-lite.learn{ color:#a5604f; background:rgba(201,138,128,.16); }
+.cues{ display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+.cues i{ font-style:normal; font-size:21px; color:rgba(36,31,27,.4); letter-spacing:.02em; }
+.sheet .btn[disabled]{ opacity:.4; }
