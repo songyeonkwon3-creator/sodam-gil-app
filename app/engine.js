@@ -661,10 +661,13 @@ window.EP = window.EP || {};
           <h3>문장 패턴 <span class="tag-lite">${(C.grammar || []).length}개</span></h3>
           <ul class="glist">${gram}</ul>
           <div class="btn-row">
-            <button class="btn primary" data-close type="button">닫기</button>
+            <button class="btn primary" data-practice type="button">복습하기</button>
+            <button class="btn" data-close type="button">닫기</button>
           </div>
         </div>
       </div>`);
+    const pb = ov.querySelector('[data-practice]');
+    if (pb) pb.addEventListener('click', () => { if (window.EP.Practice) EP.Practice.open('quiz'); });
     return ov;
   }
 
@@ -717,6 +720,7 @@ window.EP = window.EP || {};
       </div>
 
       <div class="acts">
+        <button class="practice" id="practiceBtn" type="button">복습하기</button>
         <button class="primary" id="againBtn" type="button">다시 플레이</button>
         <button id="learnBtn" type="button">오늘 배운 것</button>
         <button id="keepBtn" type="button">이 선택으로 남겨 두기</button>
@@ -727,6 +731,7 @@ window.EP = window.EP || {};
       location.reload();
     });
     card.querySelector('#learnBtn').addEventListener('click', openLearning);
+    card.querySelector('#practiceBtn').addEventListener('click', () => { if (window.EP.Practice) EP.Practice.open('quiz'); });
     card.querySelector('#keepBtn').addEventListener('click', e => { e.target.textContent = '저장되었습니다'; });
     card.querySelectorAll('.rrow').forEach((r, i) => {
       r.classList.add('new'); r.style.animationDelay = (0.08 * i) + 's';
