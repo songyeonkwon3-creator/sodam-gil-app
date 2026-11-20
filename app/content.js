@@ -17,12 +17,12 @@ EP.CONTENT_DEFAULT = {
     nextTitle: 'DAY 2 〈골목 끝의 작은 카페〉'
   },
 
-  /* 오늘 배운 단어 — 장면 표시 */
+  /* 오늘 배운 단어 — 장면 표시. pron 은 실제 발음([신따] 등)으로, 화면에 보이고 음성도 이대로 읽는다. */
   vocab: [
     { word: '여기', roman: 'yeogi',   ko: '이곳',           en: 'here',            scene: 'S02' },
     { word: '비',   roman: 'bi',      ko: '하늘에서 오는 물', en: 'rain',            scene: 'S02' },
-    { word: '벗다', roman: 'beotda',  ko: '신발을 떼어 내다', en: 'to take off',     scene: 'S04' },
-    { word: '신다', roman: 'sinda',   ko: '신발을 발에 걸치다', en: 'to put on (shoes)', scene: 'S04' },
+    { word: '벗다', roman: 'beotda',  pron: '[벋따]', ko: '신발이나 옷을 몸에서 떼어 내다', en: 'to take off',     scene: 'S04' },
+    { word: '신다', roman: 'sinda',   pron: '[신따]', ko: '신발이나 양말에 발을 넣다', en: 'to put on (shoes)', scene: 'S04' },
     { word: '열쇠', roman: 'yeolsoe', ko: '문을 여는 물건',   en: 'key',             scene: 'S05' },
     { word: '사진', roman: 'sajin',   ko: '빛으로 남긴 그림', en: 'photograph',      scene: 'S07' }
   ],

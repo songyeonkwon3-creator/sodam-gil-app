@@ -635,7 +635,7 @@ window.EP = window.EP || {};
     const vocab = (C.vocab || []).map(v =>
       `<li class="vrow">
          <span class="vw">${v.word}</span>
-         <span class="vr">${v.roman || ''}</span>
+         <span class="vr">${v.pron ? v.pron + ' ' : ''}${v.roman || ''}</span>
          <span class="vm">${v.ko || ''}</span>
          <span class="ve">${v.en || ''}</span>
          <b class="vs">${v.scene || ''}</b>
