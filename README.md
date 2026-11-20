@@ -39,4 +39,6 @@ _headers              Netlify 캐시 헤더
 - 배경으로 반복 재생: `app/art-src.js` 의 `EP.ART_VIDEO` (세트 키 → 영상 경로)
 - 선택지를 고르면 한 번 재생: `EP.CLIP_SRC` 에 영상을 등록하고, `app/data.js` 의 선택지에 `clip:'키'` 를 적습니다.
   재생이 끝나거나 화면을 탭하면 이야기가 이어집니다.
+- 대사 사이에 `{t:'clip', clip:'키', bg:'세트'}` 를 넣으면 영상 재생 후 배경이 그 세트로 바뀝니다. `{t:'bg', art:'세트'}` 는 영상 없이 배경만 바꿉니다.
+- `EP.CLIP_SRC` 값을 `{ src, endImg }` 로 쓰면 영상이 끝난 뒤 그 그림을 보여 주고 탭을 기다립니다.
 - 새 영상은 휴대폰용으로 줄여서 넣으세요 (예: `ffmpeg -i 원본.mp4 -c:v libx264 -crf 26 -movflags +faststart 결과.mp4`).

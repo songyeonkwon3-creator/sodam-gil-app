@@ -468,3 +468,10 @@ html,body{
   background:rgba(15,14,13,.55); color:#f3ede2; font-size:30px; letter-spacing:.02em;
   font-family:'Gowun Dodum',sans-serif; pointer-events:none;
 }
+
+.cliplayer .clipimg{
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;
+  opacity:0; transition:opacity 420ms ease;
+}
+.cliplayer.img .clipimg{ opacity:1; }
+.cliplayer .clipskip{ z-index:2; }

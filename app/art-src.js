@@ -35,10 +35,12 @@ window.EP = window.EP || {};
 
 EP.ART_SRC = {
   /* S01 배경은 영상 — 감독님 제공 상승 샷 (10s, 9:16). CSS 레이어는 폴백으로 남긴다. */
-  plane:     '',
+  plane:     'assets/art/plane.webp',        /* 비행기 창가 — 영상 마지막 장면에서 멈춘 그림 */
+  planePhone: 'assets/art/plane_phone.webp', /* S01 휴대폰 예약 정보 (지문 01-05~01-06) */
   alley:     '',
   alleyEvening: '',
   gate:      'assets/art/gate.webp',   /* [02 영상] 초인종 영상의 마지막 장면 */
+  gateFront: 'assets/art/gate_front.webp', /* S02 골목 끝 초록 대문 영상의 마지막 장면 */
   genkan:    '',
   kitchen:   '',
   room:      '',
@@ -53,15 +55,17 @@ EP.ART_SRC = {
 
 /* 배경 영상 — 세트 위에 깔리는 루프 비디오 */
 EP.ART_VIDEO = {
-  plane: 'assets/video/s01_plane.mp4',   /* S01 비행기 창밖 */
   alley: 'assets/video/s02_alley.mp4'    /* S02 소담길 골목 */
 };
 
 /* 장면 영상 — 선택지를 고르면 한 번 재생되고 끝나면 이야기가 이어진다.
-   data.js 선택지에 clip:'키' 를 적으면 연결된다. 화면을 탭하면 건너뛴다. */
+   data.js 선택지에 clip:'키' 를 적으면 연결된다. 화면을 탭하면 건너뛴다.
+   대사 사이에 {t:'clip', clip:'키', bg:'세트'} 를 넣으면 재생 후 배경을 그 세트로 바꾼다.
+   문자열 대신 { src, endImg } 를 쓰면 영상이 끝난 뒤 그 그림을 보여 주고 탭을 기다린다. */
 EP.CLIP_SRC = {
+  gateWalk: 'assets/video/s02_gate_walk.mp4', /* 골목 끝 초록 대문으로 걸어간다 (선택지 앞) */
   bell:  'assets/video/s02_bell.mp4',    /* 초인종을 누른다 */
-  phone: 'assets/video/s02_phone.mp4',   /* 예약 정보를 다시 확인한다 */
+  phone: { src: 'assets/video/s02_phone.mp4', endImg: 'assets/art/gate_phone.webp' }, /* 예약 정보를 다시 확인한다 → 예약 화면 */
   cat:   'assets/video/s02_cat.mp4'      /* 대문 아래 고양이를 본다 */
 };
 
