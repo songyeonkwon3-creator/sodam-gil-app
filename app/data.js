@@ -35,8 +35,10 @@ window.EP.SCENES = [
         {ko:'한국의 일상을 직접 경험하고 싶어서.', en:'Because I wanted to live an ordinary Korean day for myself.', set:{motivation:'life'}}
        ]},
       {t:'line', id:'', who:'PC', ko:'이번에는 조금 더 용감해져 볼까.', en:"This time, maybe I'll be a little braver."},
+      {t:'bg', art:'planePhone'},
       {t:'line', id:'01-05', who:'NAR', ko:'휴대폰 화면에 숙소 예약 정보가 떠 있다.', en:'The booking confirmation is up on my phone.'},
       {t:'line', id:'01-06', who:'SYS', ko:'봄하숙 · 체크인 오늘 · 숙박 기간 30일', en:'Bom Guesthouse · Check-in today · 30 nights'},
+      {t:'bg', art:'plane'},
       {t:'line', id:'01-07', who:'NAR', ko:'처음 보는 동네 이름. 소담길.', en:'A neighbourhood name I have never seen. Sodam-gil.'},
       {t:'line', id:'01-08', who:'NAR', ko:'어떤 곳일까?', en:'I wonder what kind of place it is.'}
     ]
@@ -50,6 +52,7 @@ window.EP.SCENES = [
       {t:'line', id:'02-03', who:'NAR', ko:'그런데 하늘에서 빗방울이 떨어지기 시작한다.', en:'Then the sky starts to drop rain.'},
       {t:'line', id:'02-04', who:'PC', ko:'어? 비가 오네.', en:'Huh? It\'s raining.'},
       {t:'line', id:'02-05', who:'NAR', ko:'골목 끝에 작은 대문이 보인다.', en:'At the end of the alley, a small gate comes into view.'},
+      {t:'clip', clip:'gateWalk', bg:'gateFront'},
       {t:'line', id:'02-06', who:'PC', ko:'봄하숙... 여기인가?', en:'Bom Guesthouse... is this it?'},
       {t:'choice', id:'C02', title:'대문 앞에서', type:'ACTION',
        opts:[

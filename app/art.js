@@ -132,6 +132,10 @@ window.EP = window.EP || {};
       <div class="eye l"></div><div class="eye r"></div>
     </div>`;
 
+  /* 장면 안에서 바꿔 끼우는 배경 (그림이 없을 때는 원래 세트 모양으로 폴백) */
+  SETS.planePhone = SETS.plane;
+  SETS.gateFront = SETS.gate;
+
   window.EP.Art = {
     mount(host) {
       host.innerHTML = '';
@@ -204,7 +208,9 @@ window.EP = window.EP || {};
 
     /* 장면 영상 — 선택 직후 한 번 재생. 끝나거나, 탭하거나, 로드에 실패하면 이어진다. */
     clip(key) {
-      const src = (window.EP.CLIP_SRC || {})[key];
+      const ent = (window.EP.CLIP_SRC || {})[key];
+      const src = ent && typeof ent === 'object' ? ent.src : ent;
+      const endImg = ent && typeof ent === 'object' ? ent.endImg : '';
       const stage = document.getElementById('stage');
       if (!src || !stage) return Promise.resolve();
       return new Promise(resolve => {
@@ -228,10 +234,21 @@ window.EP = window.EP || {};
           setTimeout(() => wrap.remove(), 420);
           resolve();
         };
-        const guard = setTimeout(finish, 15000);
-        vid.addEventListener('ended', finish);
+        let guard = setTimeout(finish, 15000);
+        /* 영상이 끝나면 정해진 그림을 보여 주고, 탭하면 이어진다 */
+        const toImage = () => {
+          if (done || !endImg || wrap.classList.contains('img')) return finish();
+          clearTimeout(guard); guard = setTimeout(finish, 60000);
+          const img = document.createElement('img');
+          img.className = 'clipimg'; img.alt = ''; img.src = endImg;
+          img.addEventListener('error', finish);
+          wrap.appendChild(img);
+          skip.textContent = '탭하여 계속';
+          requestAnimationFrame(() => wrap.classList.add('img'));
+        };
+        vid.addEventListener('ended', toImage);
         vid.addEventListener('error', finish);
-        wrap.addEventListener('click', finish);
+        wrap.addEventListener('click', () => (endImg && !wrap.classList.contains('img')) ? toImage() : finish());
         stage.appendChild(wrap);
         requestAnimationFrame(() => wrap.classList.add('on'));
         /* 소리 설정이 꺼져 있으면 무음. 소리 재생이 막히면 무음으로 다시 시도한다. */

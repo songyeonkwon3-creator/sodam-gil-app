@@ -116,8 +116,16 @@ window.EP = window.EP || {};
       }
     }
     const sc = EP.SCENES[si];
-    EP.Art.show(sc.art);
-    if (EP.Art.reset) EP.Art.reset(sc.art);
+    /* 이어하기·장면 점프 : 이 장면에서 이미 지나간 배경 변경(bg/clip)을 다시 적용 */
+    let artKey = sc.art;
+    for (let k = 0; k < App.cursor && k < App.flow.length; k++) {
+      const f = App.flow[k];
+      if (f.scene !== si) continue;
+      if (f.t === 'bg') artKey = f.art;
+      else if (f.t === 'clip' && f.bg) artKey = f.bg;
+    }
+    EP.Art.show(artKey);
+    if (EP.Art.reset) EP.Art.reset(artKey);
     if (window.EP.Audio) EP.Audio.scene(sc.art, sc.id);
     App.interactActive = false;
     refreshHintState();
@@ -307,6 +315,14 @@ window.EP = window.EP || {};
       if (b.t === 'prop') { EP.Art.prop(b.name); App.cursor++; continue; }
       if (b.t === 'fx') { fx(b.art, b.off); App.cursor++; continue; }
       if (b.t === 'set') { App.story(b.patch || {}); App.cursor++; continue; }
+      if (b.t === 'bg') { EP.Art.show(b.art); App.cursor++; savePos(); continue; }
+      if (b.t === 'clip') {
+        el.dlg.hidden = true;
+        await EP.Art.clip(b.clip);
+        if (!alive()) return;
+        if (b.bg) EP.Art.show(b.bg);
+        App.cursor++; savePos(); continue;
+      }
       if (b.t === 'wait') { await new Promise(r => setTimeout(r, b.ms || 600)); App.cursor++; continue; }
 
       if (b.t === 'interact') {
