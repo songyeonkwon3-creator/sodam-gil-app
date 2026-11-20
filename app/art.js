@@ -162,17 +162,21 @@ window.EP = window.EP || {};
           return;
         }
         /* 배경 영상이 있으면 정지 이미지보다 먼저 깔고, 로드 실패 시 CSS 폴백으로 돌아간다 */
-        const vsrc = (window.EP.ART_VIDEO || {})[key];
+        const vent = (window.EP.ART_VIDEO || {})[key];
+        const vsrc = vent && typeof vent === 'object' ? vent.src : vent;
+        const vonce = !!(vent && typeof vent === 'object' && vent.once);
         if (vsrc) {
           const vid = document.createElement('video');
           vid.className = 'artvid';
-          vid.muted = true; vid.loop = true; vid.autoplay = false;
+          vid.muted = true; vid.loop = !vonce; vid.autoplay = false;
           vid.setAttribute('playsinline', ''); vid.setAttribute('muted', '');
           vid.setAttribute('disablepictureinpicture', '');
           vid.preload = 'auto';
           vid.poster = '';
           vid.src = vsrc;
           vid.addEventListener('error', () => { vid.remove(); d.classList.remove('has-vid'); });
+          /* 한 번만 재생하는 영상은 끝나면 같은 장면의 정지 그림으로 바꿔 둔다 (브라우저마다 마지막 프레임 유지가 달라서) */
+          if (vonce) vid.addEventListener('ended', () => d.classList.add('vid-done'));
           d.insertBefore(vid, d.firstChild);
           d.classList.add('has-vid');
           videoEls[key] = vid;
@@ -201,7 +205,7 @@ window.EP = window.EP || {};
       Object.keys(videoEls).forEach(k => {
         const v = videoEls[k];
         if (!v) return;
-        if (k === key) { v.currentTime = 0; const p = v.play(); if (p && p.catch) p.catch(() => {}); }
+        if (k === key) { if (v.parentNode) v.parentNode.classList.remove('vid-done'); v.currentTime = 0; const p = v.play(); if (p && p.catch) p.catch(() => {}); }
         else { try { v.pause(); } catch (e) {} }
       });
     },
