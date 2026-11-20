@@ -35,8 +35,8 @@ window.EP = window.EP || {};
 
 EP.ART_SRC = {
   /* S01 배경은 영상 — 감독님 제공 상승 샷 (10s, 9:16). CSS 레이어는 폴백으로 남긴다. */
-  plane:     'assets/art/plane.webp',        /* 비행기 창가 — 영상 마지막 장면에서 멈춘 그림 */
-  planePhone: 'assets/art/plane_phone.webp', /* S01 휴대폰 예약 정보 (지문 01-05~01-06) */
+  plane:     'assets/art/plane.webp',        /* 비행기 창가 — 영상이 안 열릴 때 보이는 정지 그림 */
+  planePhone: 'assets/art/plane_phone.webp', /* S01 비행기 안 봄하숙 예약 화면 (지문 01-05~01-08) */
   alley:     '',
   alleyEvening: '',
   gate:      'assets/art/gate.webp',   /* [02 영상] 초인종 영상의 마지막 장면 */
@@ -53,8 +53,10 @@ EP.ART_SRC = {
   cafeInt:   'assets/art/day2_cafe_interior.webp'
 };
 
-/* 배경 영상 — 세트 위에 깔리는 루프 비디오 */
+/* 배경 영상 — 세트 위에 깔리는 루프 비디오
+   { src, once:true } 는 한 번만 재생하고 마지막 장면(창밖 도시)에서 멈춘다. */
 EP.ART_VIDEO = {
+  plane: { src: 'assets/video/s01_plane.mp4', once: true },  /* S01 비행기 창밖 */
   alley: 'assets/video/s02_alley.mp4'    /* S02 소담길 골목 */
 };
 

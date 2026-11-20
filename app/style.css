@@ -475,3 +475,9 @@ html,body{
 }
 .cliplayer.img .clipimg{ opacity:1; }
 .cliplayer .clipskip{ z-index:2; }
+
+/* 배경 영상 + 정지 그림이 함께 있는 세트 : 재생 중에는 영상, 끝나면(vid-done) 그림 */
+.set.has-vid > .artvid{ display:block !important; }
+.set.has-vid.has-img > .artimg{ display:none !important; }
+.set.has-vid.vid-done > .artvid{ display:none !important; }
+.set.has-vid.vid-done > .artimg{ display:block !important; }

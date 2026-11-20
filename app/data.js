@@ -38,7 +38,6 @@ window.EP.SCENES = [
       {t:'bg', art:'planePhone'},
       {t:'line', id:'01-05', who:'NAR', ko:'휴대폰 화면에 숙소 예약 정보가 떠 있다.', en:'The booking confirmation is up on my phone.'},
       {t:'line', id:'01-06', who:'SYS', ko:'봄하숙 · 체크인 오늘 · 숙박 기간 30일', en:'Bom Guesthouse · Check-in today · 30 nights'},
-      {t:'bg', art:'plane'},
       {t:'line', id:'01-07', who:'NAR', ko:'처음 보는 동네 이름. 소담길.', en:'A neighbourhood name I have never seen. Sodam-gil.'},
       {t:'line', id:'01-08', who:'NAR', ko:'어떤 곳일까?', en:'I wonder what kind of place it is.'}
     ]
@@ -58,7 +57,7 @@ window.EP.SCENES = [
        opts:[
         {ko:'초인종을 누른다', en:'Ring the bell', note:'집 안에서 발소리가 들린다.', noteEn:'Footsteps sound from inside the house.', then:'next', cue:'bell', clip:'bell'},
         {ko:'예약 정보를 다시 확인한다', en:'Check the booking again', note:'주소가 맞다는 것을 확인한다.', noteEn:'The address matches. This is the place.', then:'repeat', clip:'phone'},
-        {ko:'대문 아래 고양이를 본다', en:'Look at the cat under the gate', note:'고양이가 울고 대문 안으로 들어간다.', noteEn:'The cat meows and slips in through the gate.', set:{met_hodu:true}, then:'next', cue:'cat', clip:'cat'}
+        {ko:'대문 아래 고양이를 본다', en:'Look at the cat under the gate', note:'고양이가 울며 대문 밖으로 나온다.', noteEn:'The cat meows and comes out through the gate.', set:{met_hodu:true}, then:'next', cue:'cat', clip:'cat'}
        ]}
     ]
   },
