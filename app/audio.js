@@ -332,12 +332,15 @@ EP.AUDIO_SRC = {
   };
 
   function speak(text, who) {
-    if (!cfg.voiceOn || !('speechSynthesis' in window)) return false;
+    if (!cfg.voiceOn) return false;
     const clean = String(text || '').replace(/\[이름\]/g, '').replace(/[“”‘’]/g, '').trim();
     if (!clean) return false;
     const now = Date.now();
     if (now - lastVoice < 260) return false;
     lastVoice = now;
+    /* 미리 만든 음성 파일(AI 음성)이 있으면 그것을 재생 */
+    if (window.EP.Voice && EP.Voice.play(clean, who, { volume: Math.min(1, cfg.voice) })) return true;
+    if (!('speechSynthesis' in window)) return false;
     try {
       window.speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(clean);
@@ -405,7 +408,7 @@ EP.AUDIO_SRC = {
       speak(text, who);
     },
 
-    stopVoice() { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); },
+    stopVoice() { if (window.EP.Voice) EP.Voice.stop(); else if ('speechSynthesis' in window) window.speechSynthesis.cancel(); },
 
     /* 화면에 음성 지원 여부를 알려 준다 */
     voiceNote() {

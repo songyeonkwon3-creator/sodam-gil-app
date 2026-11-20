@@ -36,8 +36,10 @@ window.EP = window.EP || {};
     return v && v.pron ? v.pron.replace(/[\[\]]/g, '') : text;
   };
   function say(text, who, slow) {
-    if (!('speechSynthesis' in window)) return;
+    const isWord = (C().vocab || []).some(x => x.word === text);
     text = pronOf(text);
+    if (window.EP.Voice && EP.Voice.play(fill(text), who || (isWord ? 'WORD' : ''), { rate: slow ? 0.75 : 0 })) return;
+    if (!('speechSynthesis' in window)) return;
     try {
       speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(fill(text).replace(/[“”‘’]/g, ''));
@@ -71,7 +73,7 @@ window.EP = window.EP || {};
       };
       r.onerror = e => end(reject, new Error(e.error || 'error'));
       r.onend = () => end(resolve, []);
-      try { speechSynthesis.cancel(); } catch (e) {}
+      try { if (window.EP.Voice) EP.Voice.stop(); else speechSynthesis.cancel(); } catch (e) {}
       r.start();
       listen.stop = () => { try { r.stop(); } catch (e) {} };
     });
@@ -167,7 +169,7 @@ window.EP = window.EP || {};
     show(tab);
   }
   function close() {
-    try { speechSynthesis.cancel(); } catch (e) {}
+    try { if (window.EP.Voice) EP.Voice.stop(); else speechSynthesis.cancel(); } catch (e) {}
     if (listen.stop) listen.stop();
     if (record.stop) record.stop();
     const ov = document.getElementById('ov');
@@ -175,7 +177,7 @@ window.EP = window.EP || {};
   }
   function show(t) {
     tab = t;
-    try { speechSynthesis.cancel(); } catch (e) {}
+    try { if (window.EP.Voice) EP.Voice.stop(); else speechSynthesis.cancel(); } catch (e) {}
     document.querySelectorAll('.pr-tabs [data-tab]').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
     ({ quiz: quizStart, speak: speakList, dialog: dialogList })[t]();
     host.scrollTop = 0;

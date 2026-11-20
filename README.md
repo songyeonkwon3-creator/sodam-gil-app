@@ -49,3 +49,8 @@ _headers              Netlify 캐시 헤더
 - 따라 말하기 : `practice.speak` 문장 + 단어. 브라우저 음성 인식(Chrome·Safari)으로 점수와 틀린 글자를 보여 줍니다. 음성 인식이 없는 브라우저는 녹음해서 원어민 음성과 견주어 듣습니다.
 - 대화 연습 : `practice.dialog` 의 순자 대사에 말하거나 골라서 대답하면, 가장 가까운 대답을 찾아 피드백(정중함·반말)을 보여 줍니다.
 - 기록은 이 브라우저(localStorage `ep01.practice.v1`)에만 남습니다.
+
+## AI 음성 (Google Cloud Text-to-Speech)
+- 앱은 `assets/voice/manifest.js` 에 등록된 음성 파일이 있으면 그 파일을 재생하고, 없으면 브라우저 음성으로 읽습니다. 이름이 들어가는 문장은 브라우저 음성으로 읽습니다.
+- 음성 파일 만들기: 환경 변수 `GOOGLE_TTS_API_KEY` 를 넣고 `node tools/gen-voice.js` (샘플만: `--samples`, 문장 수만: `--dry`).
+- 역할(내레이션 NAR · 주인공 PC · 순자 SUN · 단어 WORD · 연습 LEARN)별 목소리는 `tools/voices.json` 에서 바꿉니다.
