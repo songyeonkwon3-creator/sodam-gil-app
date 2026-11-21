@@ -122,6 +122,10 @@ async function main() {
   fs.writeFileSync(path.join(OUT, 'manifest.js'),
     '/* tools/gen-voice.js 가 만드는 파일. 직접 고치지 마세요. */\nwindow.EP = window.EP || {};\nEP.VOICE_FILES = ' +
     JSON.stringify(manifest, null, 1) + ';\n');
+  /* 휴대폰·GitHub Pages 가 옛 manifest 를 캐시하지 않도록 index.html 의 주소에 버전을 붙인다 */
+  const ver = crypto.createHash('sha1').update(JSON.stringify(manifest)).digest('hex').slice(0, 8);
+  const idx = path.join(ROOT, 'index.html');
+  fs.writeFileSync(idx, fs.readFileSync(idx, 'utf8').replace(/assets\/voice\/manifest\.js(\?v=\w+)?"/, `assets/voice/manifest.js?v=${ver}"`));
   console.log(`\n${items.length}개 문장 · 새로 만듦 ${made} · 그대로 ${kept}`);
 }
 

@@ -38,18 +38,21 @@ window.EP = window.EP || {};
   function say(text, who, slow) {
     const isWord = (C().vocab || []).some(x => x.word === text);
     text = pronOf(text);
-    if (window.EP.Voice && EP.Voice.play(fill(text), who || (isWord ? 'WORD' : ''), { rate: slow ? 0.75 : 0 })) return;
-    if (!('speechSynthesis' in window)) return;
-    try {
-      speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(fill(text).replace(/[“”‘’]/g, ''));
-      u.lang = 'ko-KR';
-      const v = speechSynthesis.getVoices().find(x => /^ko/i.test(x.lang));
-      if (v) u.voice = v;
-      u.rate = slow ? 0.7 : (who === 'SUN' ? 0.88 : 0.95);
-      u.pitch = who === 'SUN' ? 0.86 : 1;
-      speechSynthesis.speak(u);
-    } catch (e) {}
+    const tts = () => {
+      if (!('speechSynthesis' in window)) return;
+      try {
+        speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(fill(text).replace(/[“”‘’]/g, ''));
+        u.lang = 'ko-KR';
+        const v = speechSynthesis.getVoices().find(x => /^ko/i.test(x.lang));
+        if (v) u.voice = v;
+        u.rate = slow ? 0.7 : (who === 'SUN' ? 0.88 : 0.95);
+        u.pitch = who === 'SUN' ? 0.86 : 1;
+        speechSynthesis.speak(u);
+      } catch (e) {}
+    };
+    if (window.EP.Voice && EP.Voice.play(fill(text), who || (isWord ? 'WORD' : ''), { rate: slow ? 0.75 : 0, fallback: tts })) return;
+    tts();
   }
 
   /* ---------------- 말하기 (음성 인식) ---------------- */
