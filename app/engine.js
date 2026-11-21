@@ -234,6 +234,10 @@ window.EP = window.EP || {};
           hideChoice();
           if (o.set) App.story(o.set);
           if (o.clip && EP.Art.clip) await EP.Art.clip(o.clip);
+          /* 말하는 선택지는 고른 뒤 직접 소리 내어 말해 본다 */
+          if (window.EP.SpeakBack && (b.type === 'LANG' || o.say)) {
+            await EP.SpeakBack.run({ text: fill(o.say || o.ko), en: fill(o.sayEn || o.en || ''), who: 'PC' });
+          }
           if (o.cue) App.sound(o.cue);
 
           if (o.note) await App.note(o.note, o.noteEn);

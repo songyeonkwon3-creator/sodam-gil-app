@@ -5,6 +5,7 @@
    (tools/gen-voice.js 가 Google Cloud Text-to-Speech 로 만들어 채운다.)
    파일이 있는 문장은 그 파일을 재생하고, 없으면 지금처럼 브라우저 음성으로 읽는다.
    이름이 들어가는 문장([이름])은 사람마다 달라서 브라우저 음성으로 읽는다.
+   학습자가 「직접 말해 보기」로 녹음한 문장은 주인공 대사로 나올 때 그 녹음을 재생한다.
    ========================================================================== */
 window.EP = window.EP || {};
 
@@ -12,11 +13,15 @@ window.EP = window.EP || {};
   const clean = t => String(t || '').replace(/[“”‘’"]/g, '').replace(/\s+/g, ' ').trim();
   let cur = null;
 
+  /* 학습자가 직접 녹음한 문장 (speakback.js). 주인공(PC) 대사로 나올 때 AI 음성 대신 재생한다. */
+  const USER = {};
+
   /* 역할이 맞는 파일을 먼저, 없으면 같은 문장의 다른 역할 파일을 찾는다 */
   function find(text, who) {
     const files = window.EP.VOICE_FILES || {};
     const t = clean(text);
     if (!t) return '';
+    if (who === 'PC' && USER[t]) return USER[t];
     if (who && files[who + '|' + t]) return files[who + '|' + t];
     const k = Object.keys(files).find(x => x.slice(x.indexOf('|') + 1) === t);
     return k ? files[k] : '';
@@ -48,6 +53,8 @@ window.EP = window.EP || {};
   EP.Voice = {
     find,
     has(text, who) { return !!find(text, who); },
+    setUser(text, url) { const t = clean(text); if (t) USER[t] = url; },
+    userFor(text) { return USER[clean(text)] || ''; },
     unlock,
     /* 재생을 시작하면 true. opts.rate : 재생 속도 (천천히 듣기 0.75)
        opts.fallback : 휴대폰이 재생을 막았을 때 대신 실행할 함수 (브라우저 음성) */

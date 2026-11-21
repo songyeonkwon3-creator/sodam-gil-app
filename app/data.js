@@ -179,11 +179,11 @@ window.EP.SCENES = [
       {t:'line', id:'08-06', who:'SUN', ko:'...그 상자는 뭐예요?', en:'...What is that box?', exp:'surprise'},
       {t:'choice', id:'C04', title:'사진을 보여줄까?', type:'STORY',
        opts:[
-        {ko:'"여기 사진이 있어요." 하며 보여준다', en:'"There\'s a photo in here." — and show her.', set:{photo_response:'show'},
+        {ko:'"여기 사진이 있어요." 하며 보여준다', en:'"There\'s a photo in here." — and show her.', say:'여기 사진이 있어요.', sayEn:'There\'s a photo in here.', set:{photo_response:'show'},
          note:'사진을 꺼내 순자에게 건넨다.', noteEn:'I take the photo out and hand it to her.'},
-        {ko:'"이 사진 누구 거예요?" 하고 묻는다', en:'"Whose photo is this?" — and ask.', set:{photo_response:'ask'},
+        {ko:'"이 사진 누구 거예요?" 하고 묻는다', en:'"Whose photo is this?" — and ask.', say:'이 사진 누구 거예요?', sayEn:'Whose photo is this?', set:{photo_response:'ask'},
          note:'사진을 든 채로 묻는다. 순자가 대답을 고른다.', noteEn:'I ask, still holding the photo. She weighs her answer.'},
-        {ko:'"그냥 상자예요." 하고 사진을 감춘다', en:'"It\'s just a box." — and hide it.', set:{photo_response:'hide'},
+        {ko:'"그냥 상자예요." 하고 사진을 감춘다', en:'"It\'s just a box." — and hide it.', say:'그냥 상자예요.', sayEn:'It\'s just a box.', set:{photo_response:'hide'},
          note:'사진을 상자 안으로 밀어 넣는다.', noteEn:'I slide the photo back into the box.'}
        ]},
       /* 후속 A — 보여주거나 물은 경우 */
