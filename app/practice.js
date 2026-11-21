@@ -30,7 +30,15 @@ window.EP = window.EP || {};
   const sfx = n => { try { if (window.EP.Audio) EP.Audio.sfx(n); } catch (e) {} };
 
   /* ---------------- 듣기 (TTS) ---------------- */
+  /* 단어의 실제 발음 (예: 신다 → [신따]). 음성은 이 발음대로 읽는다. */
+  const pronOf = text => {
+    const v = (C().vocab || []).find(x => x.word === text);
+    return v && v.pron ? v.pron.replace(/[\[\]]/g, '') : text;
+  };
   function say(text, who, slow) {
+    const isWord = (C().vocab || []).some(x => x.word === text);
+    text = pronOf(text);
+    if (window.EP.Voice && EP.Voice.play(fill(text), who || (isWord ? 'WORD' : ''), { rate: slow ? 0.75 : 0 })) return;
     if (!('speechSynthesis' in window)) return;
     try {
       speechSynthesis.cancel();
@@ -65,7 +73,7 @@ window.EP = window.EP || {};
       };
       r.onerror = e => end(reject, new Error(e.error || 'error'));
       r.onend = () => end(resolve, []);
-      try { speechSynthesis.cancel(); } catch (e) {}
+      try { if (window.EP.Voice) EP.Voice.stop(); else speechSynthesis.cancel(); } catch (e) {}
       r.start();
       listen.stop = () => { try { r.stop(); } catch (e) {} };
     });
@@ -161,7 +169,7 @@ window.EP = window.EP || {};
     show(tab);
   }
   function close() {
-    try { speechSynthesis.cancel(); } catch (e) {}
+    try { if (window.EP.Voice) EP.Voice.stop(); else speechSynthesis.cancel(); } catch (e) {}
     if (listen.stop) listen.stop();
     if (record.stop) record.stop();
     const ov = document.getElementById('ov');
@@ -169,7 +177,7 @@ window.EP = window.EP || {};
   }
   function show(t) {
     tab = t;
-    try { speechSynthesis.cancel(); } catch (e) {}
+    try { if (window.EP.Voice) EP.Voice.stop(); else speechSynthesis.cancel(); } catch (e) {}
     document.querySelectorAll('.pr-tabs [data-tab]').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
     ({ quiz: quizStart, speak: speakList, dialog: dialogList })[t]();
     host.scrollTop = 0;
@@ -182,12 +190,23 @@ window.EP = window.EP || {};
     if (vocab.length < 2) { host.innerHTML = '<p class="pr-empty">단어가 아직 없어요.</p>'; return; }
     const missed = vocab.filter(v => store.miss[v.word] > 0);
     const pool = onlyMissed && missed.length ? missed : vocab;
-    const kinds = ['listen', 'ko2en', 'en2ko'];
-    /* 틀린 적 있는 단어를 앞에 두고, 단어마다 문제 유형을 돌려 가며 낸다 */
-    const order = shuffle(pool).sort((a, b) => (store.miss[b.word] || 0) - (store.miss[a.word] || 0));
+    const kinds = shuffle(['listen', 'ko2en', 'en2ko']);
+    /* 단어마다 한 번씩 무작위 순서로 내되, 틀린 적 있는 단어를 앞에 둔다.
+       8문제를 채울 때는 이미 낸 단어를 다른 유형으로 다시 낸다 (같은 문제가 두 번 나오지 않게). */
+    const hard = shuffle(pool.filter(v => store.miss[v.word] > 0));
+    const order = hard.concat(shuffle(pool.filter(v => !(store.miss[v.word] > 0))));
     const qs = order.map((v, i) => ({ v, kind: kinds[i % 3] }));
-    while (qs.length < Math.min(8, pool.length * 2)) { const v = pool[qs.length % pool.length]; qs.push({ v, kind: kinds[(qs.length + 1) % 3] }); }
-    Q = { qs: qs.slice(0, 8), i: 0, right: 0, vocab, wrong: [] };
+    const extra = shuffle(hard.length ? hard.concat(order) : order);
+    for (let i = 0; qs.length < Math.min(8, pool.length * 2) && i < extra.length; i++) {
+      const v = extra[i];
+      if (qs.filter(q => q.v.word === v.word).length > 1) continue;
+      const used = qs.filter(q => q.v.word === v.word).map(q => q.kind);
+      qs.push({ v, kind: kinds.find(k => !used.includes(k)) });
+    }
+    /* 같은 단어가 연달아 나오지 않게 뒤쪽 문제를 섞는다 */
+    const head = qs.slice(0, order.length), tail = shuffle(qs.slice(order.length));
+    if (tail.length && head.length && tail[0].v.word === head[head.length - 1].v.word) tail.push(tail.shift());
+    Q = { qs: head.concat(tail).slice(0, 8), i: 0, right: 0, vocab, wrong: [] };
     quizAsk();
   }
   function quizAsk() {
@@ -198,14 +217,14 @@ window.EP = window.EP || {};
     const prompt = q.kind === 'listen'
       ? `<button class="pr-big-play" type="button" data-play aria-label="다시 듣기">▶ 다시 듣기</button>`
       : q.kind === 'ko2en'
-        ? `<div class="pr-word">${esc(v.word)}<small>${esc(v.roman || '')}</small></div>`
-        : `<div class="pr-word en">${esc(v.en)}<small>${esc(v.ko || '')}</small></div>`;
+        ? `<div class="pr-word">${esc(v.word)}<small>${v.pron ? esc(v.pron) + ' · ' : ''}${esc(v.roman || '')}</small></div>`
+        : `<div class="pr-word pr-en">${esc(v.en)}</div>`;
     host.innerHTML = `
       <div class="pr-prog"><i style="width:${(Q.i / Q.qs.length) * 100}%"></i></div>
       <p class="pr-k">${Q.i + 1} / ${Q.qs.length} · ${label}</p>
       <div class="pr-q">${prompt}</div>
       <div class="pr-opts">${opts.map((o, i) => `<button type="button" class="pr-opt" data-i="${i}">${
-        q.kind === 'en2ko' ? `${esc(o.word)}` : `${esc(o.en)}<small>${esc(o.ko || '')}</small>`}</button>`).join('')}</div>
+        q.kind === 'en2ko' ? `${esc(o.word)}` : `${esc(o.en)}`}</button>`).join('')}</div>
       <div class="pr-fb" hidden></div>`;
     const play = () => say(v.word);
     if (q.kind === 'listen') { host.querySelector('[data-play]').addEventListener('click', play); setTimeout(play, 250); }
@@ -223,7 +242,7 @@ window.EP = window.EP || {};
       fb.hidden = false;
       fb.className = 'pr-fb ' + (ok ? 'good' : 'bad');
       fb.innerHTML = `<b>${ok ? '맞았어요!' : '아쉬워요.'}</b>
-        <span class="pr-fb-w">${esc(v.word)} <em>${esc(v.roman || '')}</em> = ${esc(v.en)}</span>
+        <span class="pr-fb-w">${esc(v.word)} <em>${v.pron ? esc(v.pron) + ' ' : ''}${esc(v.roman || '')}</em> = ${esc(v.en)}</span>
         <button type="button" class="btn primary pr-next">${Q.i + 1 < Q.qs.length ? '다음' : '결과 보기'}</button>`;
       fb.querySelector('.pr-next').addEventListener('click', () => { Q.i++; Q.i < Q.qs.length ? quizAsk() : quizDone(); });
     }));
@@ -251,7 +270,7 @@ window.EP = window.EP || {};
 
   /* ================= 2. 따라 말하기 ================= */
   function speakItems() {
-    const words = (C().vocab || []).map(v => ({ ko: v.word, en: v.en, roman: v.roman, kind: 'word' }));
+    const words = (C().vocab || []).map(v => ({ ko: v.word, en: v.en, roman: (v.pron ? v.pron + ' · ' : '') + (v.roman || ''), kind: 'word' }));
     const lines = ((C().practice || {}).speak || []).map(s => Object.assign({ kind: 'line' }, s));
     return lines.concat(words);
   }

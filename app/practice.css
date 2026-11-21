@@ -23,7 +23,7 @@
 .pr-q{ display:grid; place-items:center; min-height:230px; margin-bottom:24px;
   background:#fff; border:1px solid var(--line); border-radius:28px; }
 .pr-word{ font-family:var(--serif); font-size:92px; color:var(--ink); text-align:center; line-height:1.2; }
-.pr-word.en{ font-family:var(--sans); font-size:62px; }
+.pr-word.pr-en{ font-family:var(--sans); font-size:62px; }
 .pr-word small{ display:block; font-family:var(--sans); font-size:28px; color:rgba(36,31,27,.45); margin-top:8px; }
 .pr-big-play{ appearance:none; border:0; cursor:pointer; background:var(--green-dk); color:#f7f2e6;
   font-family:var(--sans); font-size:36px; padding:30px 56px; border-radius:999px; }
