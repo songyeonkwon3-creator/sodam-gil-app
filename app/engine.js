@@ -600,7 +600,7 @@ window.EP = window.EP || {};
         b.setAttribute('aria-pressed', String(on));
         EP.Audio.set({ [k]: on });
         if (k === 'voiceOn' && !on) EP.Audio.stopVoice();
-        if (k === 'voiceOn' && on) EP.Audio.voice('안녕하세요. 소담길의 첫날입니다.', 'SUN');
+        if (k === 'voiceOn' && on) EP.Audio.voice('비 많이 맞았네. 얼른 들어와요.', 'SUN');
         paintSoundState();
       });
     });

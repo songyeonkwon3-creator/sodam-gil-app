@@ -417,6 +417,8 @@ EP.AUDIO_SRC = {
 
     /* 화면에 음성 지원 여부를 알려 준다 */
     voiceNote() {
+      const n = Object.keys(window.EP.VOICE_FILES || {}).length;
+      if (n) return `AI 음성 ${n}개 연결됨 · 켜면 순자 할머니 목소리로 들려줘요.`;
       if (!('speechSynthesis' in window)) return '이 브라우저는 음성을 지원하지 않아요.';
       return koVoice() ? '한국어 음성으로 읽어 줍니다.' : '한국어 음성이 설치되어 있지 않아, 기본 음성으로 읽습니다.';
     }

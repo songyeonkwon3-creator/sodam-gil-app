@@ -42,7 +42,7 @@ window.EP = window.EP || {};
       }
     } catch (e) { unlocked = false; }
   }
-  ['pointerdown', 'touchend', 'click', 'keydown'].forEach(ev =>
+  ['touchend', 'pointerup', 'click', 'keydown'].forEach(ev =>
     window.addEventListener(ev, unlock, { capture: true, passive: true }));
 
   EP.Voice = {
