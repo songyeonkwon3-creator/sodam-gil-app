@@ -339,7 +339,12 @@ EP.AUDIO_SRC = {
     if (now - lastVoice < 260) return false;
     lastVoice = now;
     /* 미리 만든 음성 파일(AI 음성)이 있으면 그것을 재생 */
-    if (window.EP.Voice && EP.Voice.play(clean, who, { volume: Math.min(1, cfg.voice) })) return true;
+    if (window.EP.Voice && EP.Voice.play(clean, who, { volume: Math.min(1, cfg.voice), fallback: () => tts(clean, who) })) return true;
+    return tts(clean, who);
+  }
+
+  /* 브라우저 음성으로 읽기 (음성 파일이 없거나 재생이 막혔을 때) */
+  function tts(clean, who) {
     if (!('speechSynthesis' in window)) return false;
     try {
       window.speechSynthesis.cancel();

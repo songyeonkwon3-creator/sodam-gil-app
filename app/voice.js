@@ -22,22 +22,51 @@ window.EP = window.EP || {};
     return k ? files[k] : '';
   }
 
+  /* 휴대폰(특히 iPhone)은 탭 안에서 처음 재생한 소리 요소만 이후에 재생을 허락한다.
+     그래서 소리 요소 하나를 만들어 첫 탭 때 무음으로 한 번 재생해 두고, 모든 대사를 그 요소로 재생한다. */
+  const SILENT = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQQAAACAgICA';
+  let el = null, unlocked = false;
+  function player() {
+    if (!el) { el = new Audio(); el.preload = 'auto'; el.setAttribute('playsinline', ''); }
+    return el;
+  }
+  function unlock() {
+    if (unlocked) return;
+    unlocked = true;
+    try {
+      const a = player();
+      if (!a.src || a.paused) {
+        a.src = SILENT;
+        const p = a.play();
+        if (p && p.catch) p.catch(() => { unlocked = false; });
+      }
+    } catch (e) { unlocked = false; }
+  }
+  ['pointerdown', 'touchend', 'click', 'keydown'].forEach(ev =>
+    window.addEventListener(ev, unlock, { capture: true, passive: true }));
+
   EP.Voice = {
     find,
     has(text, who) { return !!find(text, who); },
-    /* 재생에 성공하면 true. opts.rate : 재생 속도 (천천히 듣기 0.75) */
+    unlock,
+    /* 재생을 시작하면 true. opts.rate : 재생 속도 (천천히 듣기 0.75)
+       opts.fallback : 휴대폰이 재생을 막았을 때 대신 실행할 함수 (브라우저 음성) */
     play(text, who, opts) {
       const src = find(text, who);
       if (!src) return false;
       opts = opts || {};
       try {
         this.stop();
-        const a = new Audio(src);
+        const a = player();
+        a.src = src;
         a.volume = Math.max(0, Math.min(1, opts.volume == null ? 1 : opts.volume));
-        if (opts.rate) { a.playbackRate = opts.rate; a.preservesPitch = true; }
-        const p = a.play();
-        if (p && p.catch) p.catch(() => {});
+        a.playbackRate = opts.rate || 1;
+        a.preservesPitch = true;
         cur = a;
+        const p = a.play();
+        if (p && p.catch) p.catch(err => {
+          if (cur === a && err && err.name !== 'AbortError' && typeof opts.fallback === 'function') opts.fallback();
+        });
         return true;
       } catch (e) { return false; }
     },
