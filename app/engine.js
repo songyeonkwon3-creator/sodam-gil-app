@@ -399,8 +399,7 @@ window.EP = window.EP || {};
   const HINTS = {
     S01: [{ ko: '이 장면에는 언어 과제가 없습니다.', en: 'No language task in this scene — just get inside the story.', why: '몰입과 자기 투영을 위한 장면입니다.' }],
     S02: [
-      { ko: '‘여기’는 내가 서 있는 이곳을 가리키는 말이에요.', en: '‘여기’ means this place — right where you are.', why: '문 앞에서 ‘봄하숙... 여기인가?’ 하고 혼잣말했죠.' },
-      { ko: '‘비’ = rain, ‘어디’ = where.', en: '‘비’ is rain. ‘어디’ is where.', why: '하늘에서 빗방울이 떨어지기 시작했어요.' }
+      { ko: '초인종을 누를까, 예약을 다시 볼까, 고양이를 볼까. 정답은 없어요.', en: 'Ring the bell, check the booking, or look at the cat. There is no right answer.', why: '하고 싶은 것을 골라 보세요. 어떤 것을 골라도 이야기는 이어집니다.' }
     ],
     S03: [
       { ko: '처음 만난 어른에게는 ‘안녕하세요’가 자연스러워요.', en: 'With an elder you have just met, ‘안녕하세요’ is the natural choice.', why: '세 선택 모두 진행됩니다. 표현의 온도만 달라져요.' },
@@ -408,9 +407,9 @@ window.EP = window.EP || {};
       { ko: '‘안녕! 고마워!’는 친구 사이의 반말이에요.', en: '‘안녕! 고마워!’ is casual speech — for friends.', why: '틀린 문법이 아니라 관계에 따른 차이입니다. 순자가 직접 짚어 줘요.' }
     ],
     S04: [
-      { ko: '순자가 “신발은 여기서 벗어요.”라고 했어요.', en: 'Sunja said: “You take your shoes off here.”', why: '1단계 : 상황을 다시 떠올려 보세요.' },
-      { ko: '신발 그림을 눌러 보세요.', en: 'Tap the shoes.', why: '2단계 : 순자가 신발 쪽을 가리킵니다.' },
-      { ko: '‘신발을 벗어요’ = you take your shoes off. ‘벗다’ = take off (shoes, clothes).', en: '‘신발을 벗어요’ = you take your shoes off. ‘벗다’ = to take off footwear or clothing.', why: '3단계 : 벗은 다음에는 ‘실내화’(indoor slippers)를 신어요.' }
+      { ko: '순자가 “신발은 여기서 벗어요.”라고 했어요.', en: 'Sunja said: “You take your shoes off here.”', why: '1단계 : 순자의 첫 번째 말을 다시 떠올려 보세요.' },
+      { ko: '순자가 “실내화는 저기 있어요.”라고 했어요.', en: 'Sunja said: “The indoor slippers are over there.”', why: '2단계 : 순자의 두 번째 말이에요. 신발을 벗은 다음에 할 일이에요.' },
+      { ko: '‘여기’는 말하는 사람 가까이 있는 곳, ‘저기’는 말하는 사람과 듣는 사람 모두에게서 멀리 있는 곳이에요.', en: '‘여기’ = here, the place near the speaker. ‘저기’ = over there, a place far from both the speaker and the listener.', why: '3단계 : 신발은 순자가 서 있는 여기(현관)에서 벗고, 실내화는 순자가 가리킨 저기(신발장 옆)에서 신어요.' }
     ],
     S05: [
       { ko: '자기소개는 ‘저는 + 이름 + 입니다’ 순서예요.', en: 'Self-introduction: ‘저는’ + name + ‘입니다’.', why: '이름이 외국어여도 이 문장은 그대로 안전합니다.' },
