@@ -457,7 +457,9 @@ window.EP = window.EP || {};
       okBtn.addEventListener('click', async () => {
         host.innerHTML = '';
         document.getElementById('stage').classList.remove('compose-mode');
-        await ctx.note(`저는 ${name}입니다.`, `I am ${name}.`, 1200);
+        /* 완성한 자기소개를 직접 말해 본다 → 녹음하면 05-06 대사가 내 목소리로 나온다 */
+        if (window.EP.SpeakBack) await EP.SpeakBack.run({ text: `저는 ${name}입니다.`, en: `I am ${name}.`, who: 'PC', note: '듣고 따라 말해 보세요. 녹음하면 이야기 속 내 자기소개가 내 목소리로 나와요.' });
+        else await ctx.note(`저는 ${name}입니다.`, `I am ${name}.`, 1200);
         ctx.done();
       });
       paint();
