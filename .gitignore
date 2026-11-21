@@ -7,3 +7,4 @@ Thumbs.db
 
 # 로컬 테스트용
 *.local
+assets/voice/samples/
