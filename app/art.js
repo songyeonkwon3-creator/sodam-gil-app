@@ -171,9 +171,10 @@ window.EP = window.EP || {};
           vid.muted = true; vid.loop = !vonce; vid.autoplay = false;
           vid.setAttribute('playsinline', ''); vid.setAttribute('muted', '');
           vid.setAttribute('disablepictureinpicture', '');
-          vid.preload = 'auto';
+          /* 처음부터 모든 영상을 받아 두지 않는다. 그 세트가 화면에 나올 때(show) 불러온다. */
+          vid.preload = 'none';
           vid.poster = '';
-          vid.src = vsrc;
+          vid.src = vsrc; vid.dataset.src = vsrc;
           vid.addEventListener('error', () => { vid.remove(); d.classList.remove('has-vid'); });
           /* 한 번만 재생하는 영상은 끝나면 같은 장면의 정지 그림으로 바꿔 둔다 (브라우저마다 마지막 프레임 유지가 달라서) */
           if (vonce) vid.addEventListener('ended', () => d.classList.add('vid-done'));
@@ -206,7 +207,10 @@ window.EP = window.EP || {};
         const v = videoEls[k];
         if (!v) return;
         if (k === key) { if (v.parentNode) v.parentNode.classList.remove('vid-done'); v.currentTime = 0; const p = v.play(); if (p && p.catch) p.catch(() => {}); }
-        else { try { v.pause(); } catch (e) {} }
+        else if (!v.paused || v.currentTime) {
+          /* 지나간 세트의 영상은 멈추고 받은 데이터도 놓아준다. 다시 보여 줄 때 처음부터 다시 받는다. */
+          try { v.pause(); v.removeAttribute('src'); v.load(); v.src = v.dataset.src; v.preload = 'none'; } catch (e) {}
+        }
       });
     },
 
@@ -235,7 +239,11 @@ window.EP = window.EP || {};
           clearTimeout(guard);
           wrap.classList.remove('on');
           try { vid.pause(); } catch (e) {}
-          setTimeout(() => wrap.remove(), 420);
+          /* 다 본 영상은 디코더와 버퍼를 바로 놓아준다 (iPhone 은 지운 영상의 메모리를 늦게 돌려준다) */
+          setTimeout(() => {
+            try { vid.removeAttribute('src'); vid.load(); } catch (e) {}
+            wrap.remove();
+          }, 420);
           resolve();
         };
         let guard = setTimeout(finish, 15000);

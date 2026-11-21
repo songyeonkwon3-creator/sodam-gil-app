@@ -42,7 +42,8 @@ html,body{
   overflow:hidden; background:#0f0e0d;
   transform:translate(-50%,-50%) scale(1);
   transform-origin:center center;
-  will-change:transform;
+  /* will-change:transform 은 쓰지 않는다. iPhone Safari 는 이 경우 1080×1920 무대를
+     줄이기 전 크기(×3배 화면 밀도)로 그려 두어 메모리가 넘쳐 페이지가 다시 로드된다. */
   isolation:isolate;
   touch-action:manipulation;
   user-select:none;
@@ -50,14 +51,16 @@ html,body{
 
 /* ---------- 배경 & 공기 ---------- */
 .art{ position:absolute; inset:0; }
-/* 배경 세트는 항상 9장이 겹쳐 있다. 보이지 않는 세트가 탭을 가로채지 않도록
-   활성 세트(.on)만 포인터를 받는다. */
+/* 배경 세트는 항상 여러 장이 겹쳐 있다. 보이지 않는 세트가 탭을 가로채지 않도록
+   활성 세트(.on)만 포인터를 받는다.
+   보이지 않는 세트는 페이드가 끝나면 visibility:hidden 으로 그리기에서 빼고, 애니메이션도 멈춘다.
+   (휴대폰에서 숨은 세트까지 큰 그림 레이어로 잡혀 메모리가 넘치던 문제) */
 .art > .set{
-  position:absolute; inset:0; opacity:0; pointer-events:none;
-  transition:opacity 620ms cubic-bezier(.4,0,.2,1);
-  will-change:opacity;
+  position:absolute; inset:0; opacity:0; pointer-events:none; visibility:hidden;
+  transition:opacity 620ms cubic-bezier(.4,0,.2,1), visibility 0s linear 620ms;
 }
-.art > .set.on{ opacity:1; pointer-events:auto; }
+.art > .set.on{ opacity:1; pointer-events:auto; visibility:visible; transition:opacity 620ms cubic-bezier(.4,0,.2,1), visibility 0s; }
+.art > .set:not(.on), .art > .set:not(.on) *{ animation-play-state:paused !important; }
 
 /* 배경 영상 : 세트를 꽉 채우고, 구조 도형은 폴백으로만 남긴다 */
 .set > .artvid{
