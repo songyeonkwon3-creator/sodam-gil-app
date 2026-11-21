@@ -2,7 +2,7 @@
   "roles": {
     "NAR":   { "name": "ko-KR-Chirp3-HD-Aoede",  "rate": 0.95 },
     "PC":    { "name": "ko-KR-Chirp3-HD-Leda",   "rate": 1.0 },
-    "SUN":   { "name": "ko-KR-Chirp3-HD-Sulafat", "rate": 0.9 },
+    "SUN":   { "name": "ko-KR-Chirp3-HD-Gacrux",  "rate": 0.9 },
     "MSG":   { "name": "ko-KR-Chirp3-HD-Leda",   "rate": 1.0 },
     "WORD":  { "name": "ko-KR-Chirp3-HD-Aoede",  "rate": 0.9 },
     "LEARN": { "name": "ko-KR-Chirp3-HD-Aoede",  "rate": 0.92 }
