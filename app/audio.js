@@ -30,6 +30,7 @@ EP.AUDIO_SRC = {
   let sceneKey = null, sceneId = null;
   let musicTimer = null, rainNode = null, rainGain = null;
   let lastVoice = 0;
+  let audibleClips = 0;
 
   const save = () => { try { localStorage.setItem(SAVE, JSON.stringify(cfg)); } catch (e) {} };
 
@@ -53,7 +54,7 @@ EP.AUDIO_SRC = {
     if (!AC) return null;
     ctx = new AC();
     master = ctx.createGain();
-    master.gain.value = cfg.master;
+    master.gain.value = audibleClips ? 0 : cfg.master;
     master.connect(ctx.destination);
 
     verb = ctx.createConvolver();
@@ -331,20 +332,24 @@ EP.AUDIO_SRC = {
     MSG: { rate: 1.02, pitch: 1.12 }
   };
 
-  function speak(text, who) {
-    if (!cfg.voiceOn) return false;
+  function speak(text, who, playback) {
+    if (!cfg.voiceOn || audibleClips) return false;
     const clean = String(text || '').replace(/\[이름\]/g, '').replace(/[“”‘’]/g, '').trim();
     if (!clean) return false;
     const now = Date.now();
-    if (now - lastVoice < 260) return false;
+    if (!playback && now - lastVoice < 260) return false;
     lastVoice = now;
     /* 미리 만든 음성 파일(AI 음성)이 있으면 그것을 재생 */
-    if (window.EP.Voice && EP.Voice.play(clean, who, { volume: Math.min(1, cfg.voice), fallback: () => tts(clean, who) })) return true;
-    return tts(clean, who);
+    if (window.EP.Voice && EP.Voice.play(clean, who, {
+      volume: Math.min(1, cfg.voice),
+      onStart: playback?.onStart,
+      fallback: () => { if (!tts(clean, who, playback)) playback?.onError(); }
+    })) return true;
+    return tts(clean, who, playback);
   }
 
   /* 브라우저 음성으로 읽기 (음성 파일이 없거나 재생이 막혔을 때) */
-  function tts(clean, who) {
+  function tts(clean, who, playback) {
     if (!('speechSynthesis' in window)) return false;
     try {
       window.speechSynthesis.cancel();
@@ -356,6 +361,10 @@ EP.AUDIO_SRC = {
       u.rate = st.rate;
       u.pitch = st.pitch;
       u.volume = Math.min(1, cfg.voice);
+      if (playback) {
+        u.onstart = playback.onStart;
+        u.onerror = event => { if (!['canceled', 'interrupted'].includes(event.error)) playback.onError(); };
+      }
       window.speechSynthesis.speak(u);
       return true;
     } catch (e) { return false; }
@@ -384,7 +393,7 @@ EP.AUDIO_SRC = {
       Object.assign(cfg, patch);
       save();
       if (!ctx) return;
-      ramp(master.gain, cfg.master);
+      ramp(master.gain, audibleClips ? 0 : cfg.master);
       ramp(busMusic.gain, cfg.musicOn ? cfg.music : 0);
       ramp(busSfx.gain, cfg.sfxOn ? cfg.sfx : 0);
       if (cfg.musicOn) startMusic(); else stopMusic();
@@ -401,19 +410,34 @@ EP.AUDIO_SRC = {
     },
 
     sfx(name) {
-      if (!ctx || !started || !cfg.sfxOn) return;
+      if (!ctx || !started || !cfg.sfxOn || audibleClips) return;
       if (EP.AUDIO_SRC[name]) { /* 실음원이 있으면 그쪽이 재생 (아래 playFile) */ }
       const fn = SFX[name];
       if (fn) { try { fn(); } catch (e) {} }
     },
 
     /* 대사 읽기 : 내레이션·인물 대사만 (효과음 캡션 제외) */
-    voice(text, who) {
+    voice(text, who, playback) {
       if (who === 'SFX' || who === 'SYS') return;
-      speak(text, who);
+      return speak(text, who, playback);
     },
 
     stopVoice() { if (window.EP.Voice) EP.Voice.stop(); else if ('speechSynthesis' in window) window.speechSynthesis.cancel(); },
+
+    beginClipAudio() {
+      audibleClips++;
+      this.stopVoice();
+      if (master) {
+        master.gain.cancelScheduledValues(ctx.currentTime);
+        master.gain.setValueAtTime(0, ctx.currentTime);
+      }
+      let released = false;
+      return () => {
+        if (released) return;
+        released = true;
+        if (--audibleClips === 0 && master) ramp(master.gain, cfg.master);
+      };
+    },
 
     /* 화면에 음성 지원 여부를 알려 준다 */
     voiceNote() {

@@ -345,7 +345,7 @@ window.EP = window.EP || {};
   }
 
   /* ================= 3. 대화 연습 ================= */
-  const GRADE = { best: ['great', '아주 자연스러워요'], good: ['near', '좋아요'], casual: ['retry', '말투를 바꿔 볼까요?'] };
+  const GRADE = { best: ['great', '아주 자연스러워요'], good: ['near', '좋아요'], casual: ['retry', '말투를 바꿔 볼까요?'], mismatch: ['retry', '질문에 맞는 답을 골라 볼까요?'] };
   function dialogList() {
     const ds = (C().practice || {}).dialog || [];
     host.innerHTML = `
@@ -412,9 +412,10 @@ window.EP = window.EP || {};
     } else {
       const a = d.answers[k];
       const [cls, label] = GRADE[a.grade] || GRADE.good;
-      const rank = { best: 3, good: 2, casual: 1 };
+      const rank = { best: 3, good: 2, casual: 1, mismatch: 1 };
+      const retry = a.grade === 'casual' || a.grade === 'mismatch';
       if (!store.dlg[d.id] || rank[a.grade] > rank[store.dlg[d.id]]) { store.dlg[d.id] = a.grade; persist(); }
-      fb.className = 'pr-fb ' + (a.grade === 'casual' ? 'bad' : 'good');
+      fb.className = 'pr-fb ' + (retry ? 'bad' : 'good');
       fb.innerHTML = `<b class="pr-grade ${cls}">${label}</b>
         ${heard ? `<span class="pr-heard">들린 말 : ${esc(heard.s)}${heard.v != null ? ` · 발음 ${heard.v}점` : ''}</span>` : ''}
         <span>${esc(fill(a.fb))}<small>${esc(fill(a.fbEn || ''))}</small></span>
@@ -423,9 +424,9 @@ window.EP = window.EP || {};
           <button type="button" class="btn" data-retry>다시 해 보기</button>
           <button type="button" class="btn primary" data-next>${i + 1 < ds.length ? '다음 대화' : '목록으로'}</button>
         </div>`;
-      sfx(a.grade === 'casual' ? 'page' : 'card');
+      sfx(retry ? 'page' : 'card');
     }
-    const sb = fb.querySelector('[data-say]'); if (sb) sb.addEventListener('click', () => say(model.ko));
+    const sb = fb.querySelector('[data-say]'); if (sb) sb.addEventListener('click', () => say(fill(model.ko)));
     fb.querySelector('[data-retry]').addEventListener('click', () => dialogRun(i));
     const nx = fb.querySelector('[data-next]'); if (nx) nx.addEventListener('click', () => i + 1 < ds.length ? dialogRun(i + 1) : dialogList());
     fb.scrollIntoView({ block: 'nearest', behavior: 'smooth' });

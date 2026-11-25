@@ -173,7 +173,6 @@ window.EP = window.EP || {};
             <span>책상</span></button>
           <div class="room-hint">방을 둘러보세요 · 세 곳 모두 반복해서 볼 수 있어요</div>
           <div class="room-action" id="roomAction" hidden>
-            <span class="ra-tx">아직 둘러볼 곳이 남았어요.</span>
             <button type="button" class="ra-btn" id="openBox">상자 열기</button>
           </div>
         </div>`;
@@ -188,6 +187,20 @@ window.EP = window.EP || {};
       let opened = false;
       const action = host.querySelector('#roomAction');
       const openBtn = host.querySelector('#openBox');
+      const roomHint = host.querySelector('.room-hint');
+      const visited = new Set([
+        EP.App.s.inspected_window && 'window',
+        EP.App.s.inspected_bed && 'bed',
+        EP.App.s.box_found && 'desk'
+      ].filter(Boolean));
+      const paintRoom = () => {
+        host.querySelectorAll('.roomhot').forEach(btn => btn.classList.toggle('done', visited.has(btn.dataset.r)));
+        roomHint.textContent = visited.has('desk')
+          ? '상자를 발견했어요. 다른 곳도 둘러볼 수 있어요.'
+          : `둘러본 곳 ${visited.size}/3 · 책상에서 상자를 찾아보세요.`;
+        action.hidden = !visited.has('desk');
+      };
+      paintRoom();
 
       /* 상자 열기 — 이 버튼을 눌러야만 방을 떠난다. 두 번 트리거되지 않는다. */
       openBtn.addEventListener('click', () => {
@@ -205,6 +218,7 @@ window.EP = window.EP || {};
           busy = true;
           const k = btn.dataset.r;
           const t = TEXT[k];
+          visited.add(k);
           btn.classList.add('done');
           btn.classList.remove('pulse');
 
@@ -225,6 +239,7 @@ window.EP = window.EP || {};
             if (!opened) action.hidden = false;
           }
           busy = false;
+          if (!opened) paintRoom();
         });
       });
     },
@@ -391,7 +406,10 @@ window.EP = window.EP || {};
         { t: '입니다', ok: true }
       ];
       const label = t => (t === '[이름]' ? name : t);
-      let picked = [];
+      const order = ['저는', '[이름]', '입니다'];
+      const saved = EP.App.s.composeDraft;
+      let picked = Array.isArray(saved) ? saved.slice(0, 3).filter((token, i) => token === order[i]) : [];
+      const saveDraft = () => ctx.story({ composeDraft: [...picked] });
 
       host.innerHTML = `
         <div class="compose">
@@ -400,7 +418,7 @@ window.EP = window.EP || {};
             <span class="slot"><i>1</i></span><span class="slot"><i>2</i></span><span class="slot"><i>3</i></span>
           </div>
           <div class="cp-tokens" id="cpTok">
-            ${TOKENS.map(o => `<button type="button" data-t="${o.t}">${label(o.t)}</button>`).join('')}
+            ${TOKENS.map(o => `<button type="button" data-t="${o.t}"></button>`).join('')}
           </div>
           <div class="cp-fb" id="cpFb">순서대로 눌러 자기소개를 완성해 보세요.</div>
           <div class="cp-acts">
@@ -416,13 +434,16 @@ window.EP = window.EP || {};
 
       const paint = () => {
         slots.forEach((s, i) => {
-          s.innerHTML = picked[i] ? label(picked[i]) : '<i>' + (i + 1) + '</i>';
+          if (picked[i]) s.textContent = picked.length === 3 ? (i === 1 ? name + '입니다.' : i === 2 ? '' : '저는') : label(picked[i]);
+          else s.innerHTML = '<i>' + (i + 1) + '</i>';
+          s.hidden = picked.length === 3 && i === 2;
           s.classList.toggle('filled', !!picked[i]);
         });
         okBtn.disabled = picked.length !== 3;
       };
 
       tokenWrap.querySelectorAll('button').forEach(b => {
+        b.textContent = label(b.dataset.t);
         b.addEventListener('click', () => {
           if (picked.length >= 3) return;
           const t = b.dataset.t;
@@ -436,8 +457,13 @@ window.EP = window.EP || {};
             ctx.bumpHint('L02');
             return;
           }
+          if (t !== order[picked.length]) {
+            fb.textContent = ['먼저 ‘저는’으로 시작해 보세요.', '이제 내 이름을 넣어 보세요.', '마지막에 ‘입니다’를 넣어 보세요.'][picked.length];
+            return;
+          }
 
           picked.push(t);
+          saveDraft();
           paint();
           if (picked.length === 3) {
             fb.innerHTML = '완성! ‘말하기’를 누르세요.';
@@ -450,7 +476,7 @@ window.EP = window.EP || {};
       });
 
       host.querySelector('#cpReset').addEventListener('click', () => {
-        picked = []; paint();
+        picked = []; saveDraft(); paint();
         fb.textContent = '처음부터 다시. 순서대로 눌러 보세요.';
       });
 
@@ -460,6 +486,7 @@ window.EP = window.EP || {};
         /* 완성한 자기소개를 직접 말해 본다 → 녹음하면 05-06 대사가 내 목소리로 나온다 */
         if (window.EP.SpeakBack) await EP.SpeakBack.run({ text: `저는 ${name}입니다.`, en: `I am ${name}.`, who: 'PC', note: '듣고 따라 말해 보세요. 녹음하면 이야기 속 내 자기소개가 내 목소리로 나와요.' });
         else await ctx.note(`저는 ${name}입니다.`, `I am ${name}.`, 1200);
+        ctx.story({ composeDraft: [] });
         ctx.done();
       });
       paint();
