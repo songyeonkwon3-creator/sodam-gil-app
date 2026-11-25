@@ -207,7 +207,7 @@ window.EP = window.EP || {};
     el.dlg.hidden = true;
     el.choice.hidden = false;
     if (el.chId) el.chId.textContent = '';
-    el.chTitle.textContent = b.title || '';
+    el.chTitle.textContent = App.english && b.titleEn ? b.title + ' · ' + b.titleEn : (b.title || '');
     el.chType.textContent = b.type;
     el.chType.dataset.t = b.type;
     const doneSet = App.consumed[b.id] || new Set();
@@ -216,6 +216,7 @@ window.EP = window.EP || {};
 
     el.chList.innerHTML = '';
     return new Promise(resolve => {
+      let selected = false;
       b.opts.forEach((o, i) => {
         const btn = document.createElement('button');
         btn.type = 'button';
@@ -223,25 +224,27 @@ window.EP = window.EP || {};
         btn.innerHTML = `
           <span class="num">${i + 1}</span>
           <span class="ot">
-            <span class="ko">${fill(o.ko)}</span>
-            <span class="sub en ${App.english ? 'on' : ''}">${fill(o.en || '')}</span>
+            <span class="ko"></span>
+            <span class="sub en ${App.english ? 'on' : ''}"></span>
             ${o.tag ? `<span class="tag">${o.tag}</span>` : ''}
           </span>`;
+        btn.querySelector('.ko').textContent = fill(o.ko);
+        btn.querySelector('.sub').textContent = fill(o.en);
         btn.addEventListener('click', async () => {
-          if (doneSet.has(i)) return;
+          if (selected || doneSet.has(i)) return;
+          selected = true;
           if (b.type === 'LANG') App.l.attempts[b.id] = (App.l.attempts[b.id] || 0) + 1, persistLearn();
           btn.classList.add('picked');
           hideChoice();
           if (o.set) App.story(o.set);
           if (o.clip && EP.Art.clip) await EP.Art.clip(o.clip);
-          /* 말하는 선택지는 고른 뒤 직접 소리 내어 말해 본다 */
-          if (window.EP.SpeakBack && (b.type === 'LANG' || o.say)) {
-            await EP.SpeakBack.run({ text: fill(o.say || o.ko), en: fill(o.sayEn || o.en || ''), who: 'PC' });
-          }
           if (o.cue) App.sound(o.cue);
 
-          if (o.note) await App.note(o.note, o.noteEn);
+          if (o.note) await App.note(fill(o.note), fill(o.noteEn));
           if (o.note2) await App.note(o.note2, o.note2En);
+          if (window.EP.SpeakBack && ((b.type === 'LANG' && b.practiceSpeech !== false) || o.say)) {
+            await EP.SpeakBack.run({ text: fill(o.say || o.ko), en: fill(o.sayEn || o.en), who: 'LEARN' });
+          }
 
           if (o.then === 'repeat') {
             App.consumed[b.id] = doneSet; doneSet.add(i);
@@ -406,9 +409,9 @@ window.EP = window.EP || {};
       { ko: '초인종을 누를까, 예약을 다시 볼까, 고양이를 볼까. 정답은 없어요.', en: 'Ring the bell, check the booking, or look at the cat. There is no right answer.', why: '하고 싶은 것을 골라 보세요. 어떤 것을 골라도 이야기는 이어집니다.' }
     ],
     S03: [
-      { ko: '처음 만난 어른에게는 ‘안녕하세요’가 자연스러워요.', en: 'With an elder you have just met, ‘안녕하세요’ is the natural choice.', why: '세 선택 모두 진행됩니다. 표현의 온도만 달라져요.' },
+      { ko: '처음 만나면 인사하고, 무언가를 받으면 고마움을 전해요.', en: 'Greet someone you just met, and thank them when they give you something.', why: '순자에게 지금 어떤 말을 해야 할지 떠올려 보세요.' },
       { ko: '‘감사합니다’는 고마움을 정중하게 전하는 말이에요.', en: '‘감사합니다’ is a polite thank you.', why: '수건을 받은 직후라면 충분히 자연스러운 말이에요.' },
-      { ko: '‘안녕! 고마워!’는 친구 사이의 반말이에요.', en: '‘안녕! 고마워!’ is casual speech — for friends.', why: '틀린 문법이 아니라 관계에 따른 차이입니다. 순자가 직접 짚어 줘요.' }
+      { ko: '‘고마워’는 친한 사이에서 쓰고, ‘안녕히 계세요’는 자리를 떠날 때 써요.', en: 'Use “고마워” with people you are close to and “안녕히 계세요” when you leave.', why: '처음 만난 집주인에게는 ‘감사합니다’가 자연스러워요.' }
     ],
     S04: [
       { ko: '순자가 “신발은 여기서 벗어요.”라고 했어요.', en: 'Sunja said: “You take your shoes off here.”', why: '1단계 : 순자의 첫 번째 말을 다시 떠올려 보세요.' },
