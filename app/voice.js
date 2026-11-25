@@ -71,6 +71,7 @@ window.EP = window.EP || {};
         a.preservesPitch = true;
         cur = a;
         const p = a.play();
+        if (p && opts.onStart) p.then(() => { if (cur === a && !a.paused) opts.onStart(); }, () => {});
         if (p && p.catch) p.catch(err => {
           if (cur === a && err && err.name !== 'AbortError' && typeof opts.fallback === 'function') opts.fallback();
         });

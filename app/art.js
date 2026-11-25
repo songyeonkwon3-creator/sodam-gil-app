@@ -234,11 +234,14 @@ window.EP = window.EP || {};
         skip.textContent = '탭하면 건너뛰기';
         wrap.appendChild(vid); wrap.appendChild(skip);
         let done = false;
+        let showingImage = false;
+        let releaseClipAudio = () => {};
         const finish = () => {
           if (done) return; done = true;
           clearTimeout(guard);
           wrap.classList.remove('on');
           try { vid.pause(); } catch (e) {}
+          releaseClipAudio();
           /* 다 본 영상은 디코더와 버퍼를 바로 놓아준다 (iPhone 은 지운 영상의 메모리를 늦게 돌려준다) */
           setTimeout(() => {
             try { vid.removeAttribute('src'); vid.load(); } catch (e) {}
@@ -249,7 +252,10 @@ window.EP = window.EP || {};
         let guard = setTimeout(finish, 15000);
         /* 영상이 끝나면 정해진 그림을 보여 주고, 탭하면 이어진다 */
         const toImage = () => {
-          if (done || !endImg || wrap.classList.contains('img')) return finish();
+          if (done || !endImg || showingImage) return finish();
+          showingImage = true;
+          vid.pause();
+          releaseClipAudio();
           clearTimeout(guard); guard = setTimeout(finish, 60000);
           const img = document.createElement('img');
           img.className = 'clipimg'; img.alt = ''; img.src = endImg;
@@ -260,14 +266,27 @@ window.EP = window.EP || {};
         };
         vid.addEventListener('ended', toImage);
         vid.addEventListener('error', finish);
-        wrap.addEventListener('click', () => (endImg && !wrap.classList.contains('img')) ? toImage() : finish());
+        wrap.addEventListener('click', () => (endImg && !showingImage) ? toImage() : finish());
         stage.appendChild(wrap);
         requestAnimationFrame(() => wrap.classList.add('on'));
         /* 소리 설정이 꺼져 있으면 무음. 소리 재생이 막히면 무음으로 다시 시도한다. */
-        const soundOn = !(window.EP.Audio && EP.Audio.cfg && EP.Audio.cfg.sfxOn === false);
-        vid.muted = !soundOn;
-        const p = vid.play();
-        if (p && p.catch) p.catch(() => { vid.muted = true; vid.play().catch(finish); });
+        const audio = EP.Audio;
+        const cfg = audio?.cfg;
+        vid.muted = !!cfg && (!cfg.sfxOn || cfg.master <= 0 || cfg.sfx <= 0);
+        if (!vid.muted && cfg) {
+          vid.volume = cfg.master * cfg.sfx;
+          releaseClipAudio = audio.beginClipAudio();
+        }
+        const play = async () => {
+          try { await vid.play(); } catch (e) {
+            if (done || showingImage) return;
+            if (vid.muted) return finish();
+            vid.muted = true;
+            releaseClipAudio();
+            try { await vid.play(); } catch (error) { finish(); }
+          }
+        };
+        play();
       });
     },
 

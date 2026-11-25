@@ -14,17 +14,22 @@ window.EP = window.EP || {};
   const esc = t => String(t == null ? '' : t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   let stream = null;
 
-  async function recordOnce(maxMs) {
+  async function recordOnce(maxMs, isClosed) {
     if (!stream || !stream.active) stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
+    if (isClosed()) { releaseMic(); return ''; }
     const type = ['audio/mp4', 'audio/webm;codecs=opus', 'audio/webm'].find(t => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t)) || '';
     const rec = new MediaRecorder(stream, type ? { mimeType: type } : undefined);
     const chunks = [];
     rec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
-    const stopped = new Promise(r => { rec.onstop = r; });
+    const stopped = new Promise((resolve, reject) => {
+      rec.onstop = resolve;
+      rec.onerror = event => reject(event.error || new Error('Recording failed'));
+    });
     rec.start();
     const t = setTimeout(() => rec.state !== 'inactive' && rec.stop(), maxMs || 6000);
     recordOnce.stop = () => { clearTimeout(t); if (rec.state !== 'inactive') rec.stop(); };
-    await stopped;
+    try { await stopped; } finally { clearTimeout(t); recordOnce.stop = null; }
+    if (!chunks.length) throw new Error('Empty recording');
     return URL.createObjectURL(new Blob(chunks, { type: rec.mimeType || type || 'audio/webm' }));
   }
   function releaseMic() {
@@ -64,33 +69,58 @@ window.EP = window.EP || {};
       const msg = card.querySelector('.sb-msg');
       const recBtn = card.querySelector('[data-rec]');
       const mineBtn = card.querySelector('[data-mine]');
+      let closed = false;
+      let minePlayer = null;
       let mine = (window.EP.Voice && EP.Voice.userFor) ? EP.Voice.userFor(text) : '';
       if (mine) mineBtn.hidden = false;
 
       card.querySelector('[data-listen]').addEventListener('click', () => {
-        if (window.EP.Audio) EP.Audio.voice(text, opts.who || 'LEARN');
+        minePlayer?.pause();
+        const playback = {
+          onStart: () => { if (!closed) msg.textContent = '예시 음성이 재생됐어요. 듣고 따라 말해 보세요.'; },
+          onError: () => { if (!closed) msg.textContent = '예시 음성을 재생할 수 없어요. 소리 설정과 한국어 음성 지원을 확인해 주세요.'; }
+        };
+        if (!EP.Audio?.voice(text, opts.who || 'LEARN', playback)) playback.onError();
       });
-      mineBtn.addEventListener('click', () => { if (mine) playUrl(mine); });
+      mineBtn.addEventListener('click', () => {
+        if (!mine) return;
+        minePlayer?.pause();
+        minePlayer = playUrl(mine);
+      });
       if (recBtn) recBtn.addEventListener('click', async () => {
         if (recBtn.classList.contains('on')) { if (recordOnce.stop) recordOnce.stop(); return; }
         recBtn.classList.add('on');
         recBtn.textContent = '■ 그만하기';
         msg.textContent = '듣고 있어요… 말을 마치면 「그만하기」를 누르세요.';
+        minePlayer?.pause();
         try { if (window.EP.Voice) EP.Voice.stop(); } catch (e) {}
         try {
-          const url = await recordOnce(7000);
+          const url = await recordOnce(7000, () => closed);
+          if (closed) { if (url) URL.revokeObjectURL(url); return; }
+          if (mine) URL.revokeObjectURL(mine);
           mine = url;
           if (window.EP.Voice && EP.Voice.setUser) EP.Voice.setUser(text, url);
           mineBtn.hidden = false;
           msg.textContent = '녹음했어요! 「내 목소리」로 들어 보고, 마음에 들지 않으면 다시 말해 보세요.';
           recBtn.textContent = '● 다시 말하기';
         } catch (e) {
-          msg.textContent = '마이크 사용을 허용하면 녹음할 수 있어요. 지금은 「계속」으로 넘어가도 돼요.';
+          if (closed) return;
+          msg.textContent = e.name === 'NotFoundError'
+            ? '사용할 수 있는 마이크가 없어요. 연결 상태를 확인하거나 「계속」을 누르세요.'
+            : e.name === 'NotAllowedError'
+              ? '이 브라우저에서 마이크 접근이 허용되지 않았어요. 권한을 확인하거나 「계속」을 누르세요.'
+              : '녹음을 완료하지 못했어요. 마이크를 확인하고 다시 시도하거나 「계속」을 누르세요.';
           recBtn.textContent = '● 말해 보기';
+        } finally {
+          if (!closed) releaseMic();
+          recBtn.classList.remove('on');
         }
-        recBtn.classList.remove('on');
       });
       card.querySelector('[data-next]').addEventListener('click', () => {
+        if (closed) return;
+        closed = true;
+        minePlayer?.pause();
+        EP.Audio?.stopVoice();
         if (recordOnce.stop) recordOnce.stop();
         releaseMic();
         card.classList.remove('in');

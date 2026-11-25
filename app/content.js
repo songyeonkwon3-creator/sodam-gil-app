@@ -30,7 +30,7 @@ EP.CONTENT_DEFAULT = {
   /* 오늘 배운 문법 */
   grammar: [
     { form: '-아요 / -어요', ko: '정중하게 지금 일어나는 일을 말해요.', eg: '비가 와요.', meaning: 'It’s raining.' },
-    { form: '-(으)세요',     ko: '부드럽게 부탁하거나 권해요.',        eg: '신발은 여기서 벗어요.', meaning: 'You take your shoes off here.' },
+    { form: '-(으)세요',     ko: '부드럽게 부탁하거나 권해요.',        eg: '신발은 여기서 벗으세요.', meaning: 'Please take your shoes off here.' },
     { form: '입니다',        ko: '이름·신분을 정중하게 밝혀요.',        eg: '저는 하나입니다.', meaning: 'I am Hana.' }
   ],
 
@@ -49,31 +49,31 @@ EP.CONTENT_DEFAULT = {
     ],
     dialog: [
       { id: 'D1', scene: 'S03', title: '첫 인사',
-        sun: '비 많이 맞았네. 얼른 들어와요.', sunEn: 'You got soaked. Come in, quickly.', exp: 'worry',
+        sun: '...누구세요?', sunEn: '…Who are you?', exp: 'surprise',
         answers: [
-          { ko: '안녕하세요. 잘 부탁드립니다.', grade: 'best', fb: '처음 만난 어른에게 딱 맞는 정중한 인사예요.', fbEn: 'A perfect polite greeting for an elder you’ve just met.' },
-          { ko: '감사합니다.', grade: 'good', fb: '짧지만 분명한 감사 인사예요. ‘안녕하세요’를 먼저 붙이면 더 자연스러워요.', fbEn: 'Short and clear. Add ‘안녕하세요’ first to sound even more natural.' },
-          { ko: '안녕! 고마워!', grade: 'casual', fb: '친구에게 쓰는 반말이에요. 처음 만난 어른에게는 ‘안녕하세요. 감사합니다.’가 자연스러워요.', fbEn: 'This is casual speech for friends. With an elder, say ‘안녕하세요. 감사합니다.’' }
+          { ko: '안녕하세요. 오늘 예약한 [이름]입니다.', grade: 'best', fb: '처음 만난 집주인에게 인사하고 누구인지 밝혔어요.', fbEn: 'You greeted your host and introduced yourself.' },
+          { ko: '감사합니다.', grade: 'mismatch', fb: '고마움을 전하는 말이에요. 지금은 순자가 누구인지 물었으니 내 이름을 말해 보세요.', fbEn: 'This expresses thanks. Sunja asked who you are, so give your name.' },
+          { ko: '안녕히 계세요.', grade: 'mismatch', fb: '내가 떠날 때 남아 있는 사람에게 하는 인사예요. 지금은 처음 만난 집주인에게 인사하고 내 이름을 소개할 때예요.', fbEn: 'Say this when leaving someone who is staying. Here, greet your host and introduce yourself.' }
         ] },
       { id: 'D2', scene: 'S05', title: '차 권하기',
         sun: '차 마실래요? 따뜻해요.', sunEn: 'Would you like some tea? It’s warm.', exp: 'smile',
         answers: [
-          { ko: '감사합니다.', grade: 'best', fb: '권하는 것을 받을 때 쓰는 정중한 말이에요.', fbEn: 'The polite way to accept something offered.' },
-          { ko: '네, 좋아요.', grade: 'good', fb: '‘네’로 대답하고 ‘좋아요’로 기분을 전했어요.', fbEn: 'You answered ‘yes’ and said you’d like it.' },
+          { ko: '네, 감사합니다.', grade: 'best', fb: '‘네’로 차를 받겠다는 뜻을 밝히고 고마움을 전했어요.', fbEn: 'You accepted the tea with “네” and thanked Sunja.' },
+          { ko: '네, 다 마셨어요.', grade: 'mismatch', fb: '이미 차를 다 마셨다는 뜻이에요. 순자는 지금 차를 마실지 묻고 있어요.', fbEn: 'This says you already finished your tea. Sunja is asking if you would like some now.' },
           { ko: '응, 줘.', grade: 'casual', fb: '친구 사이의 반말이에요. 순자에게는 ‘네, 감사합니다.’가 좋아요.', fbEn: 'Casual speech. To Sunja, say ‘네, 감사합니다.’' }
         ] },
       { id: 'D3', scene: 'S05', title: '이름 말하기',
         sun: '그런데 이름이 어떻게 돼요?', sunEn: 'By the way, what’s your name?', exp: 'default',
         answers: [
           { ko: '저는 [이름]입니다.', grade: 'best', fb: '‘저는 ○○입니다’는 이름을 정중하게 밝히는 말이에요.', fbEn: '‘저는 ○○입니다’ politely states your name.' },
-          { ko: '제 이름은 [이름]이에요.', grade: 'good', fb: '조금 더 부드러운 말투예요. 이것도 자연스러워요.', fbEn: 'A slightly softer way to say it. Also natural.' },
-          { ko: '[이름].', grade: 'casual', fb: '이름만 말하면 조금 짧게 들려요. ‘저는 ○○입니다’로 말해 보세요.', fbEn: 'Just the name sounds abrupt. Try ‘저는 ○○입니다’.' }
+          { ko: '이것은 [이름]입니다.', grade: 'mismatch', fb: '‘이것은’은 사물을 가리켜요. 내 이름을 말할 때는 ‘저는’으로 시작해 보세요.', fbEn: '“이것은” points to a thing. Start with “저는” when giving your name.' },
+          { ko: '저는 서울에 살아요.', grade: 'mismatch', fb: '어디에 사는지 말하는 문장이에요. 순자는 이름을 묻고 있어요.', fbEn: 'This says where you live. Sunja is asking for your name.' }
         ] },
       { id: 'D4', scene: 'S08', title: '방은 괜찮아요?',
         sun: '방은 괜찮아요? 춥지는 않고?', sunEn: 'Is the room all right? Not cold?', exp: 'worry',
         answers: [
           { ko: '네, 괜찮아요.', grade: 'best', fb: '‘괜찮아요’는 문제없다는 뜻이에요. 질문에 딱 맞는 대답이에요.', fbEn: '‘괜찮아요’ means it’s fine. A perfect answer.' },
-          { ko: '네, 따뜻해요.', grade: 'good', fb: '‘춥지 않다’를 ‘따뜻해요’로 바꿔 말했어요. 좋아요.', fbEn: 'You answered ‘not cold’ with ‘it’s warm’. Nice.' },
+          { ko: '네, 2층이에요.', grade: 'mismatch', fb: '방이 몇 층에 있는지 말하는 문장이에요. 순자는 방에서 지내기에 괜찮은지 묻고 있어요.', fbEn: 'This says what floor the room is on. Sunja is asking if the room is comfortable.' },
           { ko: '응, 괜찮아.', grade: 'casual', fb: '친구 사이의 반말이에요. 순자에게는 ‘네, 괜찮아요.’가 자연스러워요.', fbEn: 'Casual speech. To Sunja, say ‘네, 괜찮아요.’' }
         ] }
     ]
